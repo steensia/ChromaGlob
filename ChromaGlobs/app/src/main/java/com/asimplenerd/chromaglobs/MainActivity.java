@@ -19,11 +19,30 @@ public class MainActivity extends FragmentActivity implements LoginFields.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //Request to start in landscape mode.
-        frag = new LoginFields();
+        if(findViewById(R.id.login_fragment_layout) != null){
+            if(savedInstanceState != null){
+                return;
+            }
+            LoginFields loginFields = new LoginFields();
+            getSupportFragmentManager().beginTransaction().add(R.id.login_fragment_layout, loginFields).commit();
+        }
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
         Log.d("Fragment", "Got uri: " + uri.toString());
+    }
+
+    public void swapToNewFragment(Fragment newFrag, boolean shouldStore){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if(shouldStore){
+            ft.addToBackStack(null);
+        }
+        ft.replace(R.id.login_fragment_layout, newFrag).commit();
     }
 }

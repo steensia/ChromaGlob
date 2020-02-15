@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,11 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +67,8 @@ public class LoginFields extends Fragment implements View.OnClickListener {
     private EditText usernameField, passwordField;
 
     private String username, password;
+
+    private FirebaseAuth firebaseAuth;
 
     public LoginFields() {
         // Required empty public constructor
@@ -117,6 +125,9 @@ public class LoginFields extends Fragment implements View.OnClickListener {
         //Setup progress spinner for login
         loginSpinner = view.findViewById(R.id.loginProgressBar);
         loginSpinner.setIndeterminate(true); //Spin without actual progress
+
+        //Begin firebase auth
+        firebaseAuth = FirebaseAuth.getInstance();
         //Now we can return the new view that was created.
         return view;
     }
@@ -211,42 +222,23 @@ public class LoginFields extends Fragment implements View.OnClickListener {
             publishProgress(View.VISIBLE); //Show the progress bar
             //Check login info
             //TODO check login info
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference logins = database.getReference("Logins");
-            Log.d("Firebase", logins.toString());
-            logins.addValueEventListener(new ValueEventListener() {
+            firebaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String pword = (String)dataSnapshot.child(username).child("Password").getValue();
-                    if(pword == null){
-                        Log.d("Firebase Data", "User does not exist.");
-                        onProgressUpdate(toastUserOrPassErr);
-                        return;
-                    }
-                    Log.d("Firebase Data", pword);
-                    //Check password matches
-                    //TODO we will want to encrypt these...
-                    if(pword.equals(password)){
-                        Log.d("Login", "User: " + username + " has managed to log in!");
-                        publishProgress(toastUserLoginSuccess);
-                        //TODO transition to main menu
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        Log.d("Login", "User successfully logged in");
+                        onProgressUpdate(toastUserLoginSuccess);
                     }
                     else{
-                        Log.d("Login", "Incorrect password");
                         onProgressUpdate(toastUserOrPassErr);
+                        Log.d("LogIn", "Username or password invalid!");
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d("Firebase Error", databaseError.getMessage());
                 }
             });
             //Log.d("Firebase", user.getKey().toString());
             try{Thread.sleep(2000);}
             catch(Exception e){}
-            Looper.prepare();
-            Toast.makeText(getContext(), "Login successful!", Toast.LENGTH_SHORT).show();
+            //Looper.prepare();
             publishProgress(View.GONE);
             return 0L;
         }
@@ -283,9 +275,12 @@ public class LoginFields extends Fragment implements View.OnClickListener {
 
     private void resetPassword(View view) {
         Log.d("Password", "Reset requested");
+
     }
 
     private void createNewAccount(View view) {
+
         Log.d("Account", "New account creation requested");
+        ((MainActivity) getActivity()).swapToNewFragment(new CreateAccountFragment(), true);
     }
 }
