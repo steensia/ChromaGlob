@@ -2,8 +2,10 @@ package com.asimplenerd.chromaglobs;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -12,7 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 
 /**
@@ -23,11 +32,17 @@ import android.widget.Toast;
  * Use the {@link CreateAccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class CreateAccountFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private int CREATION_SUCCESSFUL = 1;
+    private int CREATION_FAILED_DUPLICATE_USER = 2;
+    private int CREATION_FAILED_OTHER = 3;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -38,6 +53,10 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
     private View view;
 
     private EditText user, pass, passConf;
+
+    private FirebaseAuth firebaseAuth;
+
+    private String username, password;
 
     public CreateAccountFragment() {
         // Required empty public constructor
@@ -131,7 +150,10 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
 
     private void signUpIfNewUser(String username, String password){
         //TODO implement checking for existing user on firebase!
-
+        AccountCreator ac = new AccountCreator();
+        this.username = username;
+        this.password = password;
+        ac.execute(this);
     }
 
     @Override
@@ -153,5 +175,49 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class AccountCreator extends AsyncTask<Fragment, Integer, Long>{
+        @Override
+        public Long doInBackground(Fragment... obj){
+            firebaseAuth = FirebaseAuth.getInstance();
+            final Fragment current = obj[0];
+            firebaseAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        publishProgress(CREATION_SUCCESSFUL);
+                        current.getFragmentManager().popBackStack();
+                    }
+                    else{
+                        Log.d("UserCreateFailed", task.getException().toString());
+                        if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                            publishProgress(CREATION_FAILED_DUPLICATE_USER);
+                        }
+                        else{
+                            publishProgress(CREATION_FAILED_OTHER);
+                        }
+                    }
+                }
+            });
+            return 0L;
+        }
+
+        @Override
+        public void onProgressUpdate(Integer... val){
+            switch(val[0]){
+                case 1:
+                    Toast.makeText(getContext(), "User successfully created! Please log in.", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    Toast.makeText(getContext(), "User already exists!", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    Toast.makeText(getContext(), "An unknown error occurred!", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
