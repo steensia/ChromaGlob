@@ -275,7 +275,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
 
     private void resetPassword(View view) {
         Log.d("Password", "Reset requested");
-
+        ((MainActivity) getActivity()).swapToNewFragment(new ForgotPassword(), true);
     }
 
     private void createNewAccount(View view) {

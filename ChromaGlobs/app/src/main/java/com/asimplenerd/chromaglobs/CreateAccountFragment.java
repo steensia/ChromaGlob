@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 
 /**
@@ -41,7 +42,8 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
 
     private int CREATION_SUCCESSFUL = 1;
     private int CREATION_FAILED_DUPLICATE_USER = 2;
-    private int CREATION_FAILED_OTHER = 3;
+    private int CREATION_FAILED_PASSWORD_NOT_LONG_ENOUGH = 3;
+    private int CREATION_FAILED_OTHER = 4;
 
 
     // TODO: Rename and change types of parameters
@@ -140,6 +142,10 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
             Toast.makeText(getContext(), "Password cannot be empty!", Toast.LENGTH_LONG).show();
             return;
         }
+        if(pword.length() < 6){
+            Toast.makeText(getContext(), "Password must be at least six characters long.", Toast.LENGTH_LONG).show();
+            return;
+        }
         if(!pword.equals(conf)){
             Toast.makeText(getContext(), "Passwords do not match!", Toast.LENGTH_LONG).show();
             return;
@@ -193,6 +199,9 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
                         Log.d("UserCreateFailed", task.getException().toString());
                         if(task.getException() instanceof FirebaseAuthUserCollisionException){
                             publishProgress(CREATION_FAILED_DUPLICATE_USER);
+                        }
+                        else if(task.getException() instanceof FirebaseAuthWeakPasswordException){
+                            publishProgress(CREATION_FAILED_PASSWORD_NOT_LONG_ENOUGH);
                         }
                         else{
                             publishProgress(CREATION_FAILED_OTHER);
