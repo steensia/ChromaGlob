@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
@@ -67,7 +68,13 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
+        view.findViewById(R.id.playButton).setOnClickListener(this);
+        view.findViewById(R.id.tradeButton).setOnClickListener(this);
+        view.findViewById(R.id.collectionButton).setOnClickListener(this);
+        view.findViewById(R.id.missionsButton).setOnClickListener(this);
+        view.findViewById(R.id.shopButton).setOnClickListener(this);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
