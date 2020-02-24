@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainMenuFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="391dp">
+
+        <LinearLayout
+            android:id="@+id/profileControlsLayout"
+            android:layout_width="194dp"
+            android:layout_height="81dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/profileButton"
+                android:layout_width="139dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:src="@tools:sample/avatars" />
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="142dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@android:drawable/ic_menu_manage" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/playButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="12dp"
+            android:text="Play"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/tradeButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Trade"
+            app:layout_constraintStart_toEndOf="@+id/playButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/collectionButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="52dp"
+            android:text="Collection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/playButton" />
+
+        <Button
+            android:id="@+id/missionsButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="56dp"
+            android:text="Missions"
+            app:layout_constraintStart_toEndOf="@+id/collectionButton"
+            app:layout_constraintTop_toBottomOf="@+id/tradeButton" />
+
+        <Button
+            android:id="@+id/shopButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="52dp"
+            android:text="Shop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/collectionButton" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

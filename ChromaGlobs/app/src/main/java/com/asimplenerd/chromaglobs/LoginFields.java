@@ -1,7 +1,9 @@
 package com.asimplenerd.chromaglobs;
 
 import android.accounts.Account;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.opengl.Visibility;
 import android.os.AsyncTask;
@@ -9,11 +11,14 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +65,8 @@ public class LoginFields extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
+    private MainActivity mainActivity;
+
     private ProgressBar loginSpinner;
 
     private Button loginBtn, forgotPasswordBtn, signUpBtn;
@@ -69,6 +76,8 @@ public class LoginFields extends Fragment implements View.OnClickListener {
     private String username, password;
 
     private FirebaseAuth firebaseAuth;
+
+    private boolean loginSuccessful = false;
 
     public LoginFields() {
         // Required empty public constructor
@@ -142,6 +151,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mainActivity = (MainActivity)getActivity();
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -212,11 +222,12 @@ public class LoginFields extends Fragment implements View.OnClickListener {
             return;
         }
         Log.d("Login", "Button clicked. User: " + username + "\t Password: " + password);
-        new AccountManager().execute(loginSpinner);
-
+        AccountManager accMgr = new AccountManager();
+        AsyncTask task = accMgr.execute(loginSpinner);
     }
 
     private class AccountManager extends AsyncTask<ProgressBar, Integer, Long>{
+
         @Override
         public Long doInBackground(ProgressBar... pb){
             publishProgress(View.VISIBLE); //Show the progress bar
@@ -259,6 +270,9 @@ public class LoginFields extends Fragment implements View.OnClickListener {
                 signUpBtn.setEnabled(true);
                 usernameField.setEnabled(true);
                 passwordField.setEnabled(true);
+                if(loginSuccessful){
+                    mainActivity.swapToNewFragment(new MainMenuFragment(), false);
+                }
             }
             else if(update[0] == toastUserOrPassErr){
                 Toast.makeText(getContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
@@ -267,6 +281,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
             else if(update[0] == toastUserLoginSuccess){
                 //This is used to display Toast messages
                 Toast.makeText(getContext(), "User: " + username + " logged in!", Toast.LENGTH_SHORT).show();
+                loginSuccessful = true;
                 onProgressUpdate(View.GONE);
             }
         }

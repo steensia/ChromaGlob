@@ -45,4 +45,5 @@ public class MainActivity extends FragmentActivity implements LoginFields.OnFrag
         }
         ft.replace(R.id.login_fragment_layout, newFrag).commit();
     }
+
 }
