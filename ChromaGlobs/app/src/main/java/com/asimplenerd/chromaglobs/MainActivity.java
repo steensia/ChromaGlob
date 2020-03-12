@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +45,12 @@ public class MainActivity extends FragmentActivity implements LoginFields.OnFrag
             ft.addToBackStack(null);
         }
         ft.replace(R.id.login_fragment_layout, newFrag).commit();
+    }
+
+    public void launchGameActivity(){
+        Log.d("ActivityChange", "Swapping to libGDX enabled activity");
+        Intent gameLauncher = new Intent(this, ChromaGlobsGame.class);
+        startActivity(gameLauncher);
     }
 
 }

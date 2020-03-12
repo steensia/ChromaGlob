@@ -99,7 +99,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v){
         switch(v.getId()){
             case R.id.playButton:
-                Log.d("OnClick", "Launch main game activity");
+                ((MainActivity)getActivity()).launchGameActivity();
                 break;
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
