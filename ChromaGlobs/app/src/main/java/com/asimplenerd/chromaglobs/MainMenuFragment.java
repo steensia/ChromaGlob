@@ -1,9 +1,12 @@
 package com.asimplenerd.chromaglobs;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -11,6 +14,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -62,6 +81,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        getUserInfo();
     }
 
     @Override
@@ -101,6 +121,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             case R.id.playButton:
                 ((MainActivity)getActivity()).launchGameActivity();
                 break;
+            case R.id.tradeButton:
+                //Move to the trade fragment, and prepare for a trade
+                setupTrade();
+                break;
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -120,5 +144,44 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void setupTrade(){
+        ((MainActivity) getActivity()).swapToNewFragment(new TradeSetupFragment(), true);
+    }
+
+    private void getUserInfo() {
+        final FirebaseDatabase db = FirebaseDatabase.getInstance();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        db.getReference().child("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            private boolean promptShown = false;
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) {
+                    //user is brand new. Create its data
+                    DatabaseReference info = db.getReference().child("Users");
+                    Player p = new Player("Test", user.getUid(), new ArrayList<Card>());
+                    Map playerList = new HashMap<>();
+                    playerList.put(user.getUid(), p);
+                    info.updateChildren(playerList);
+                    Log.d("DBMod", "Added UID Field to Users db");
+                }
+                else{
+                    Log.d("DBMod", "User already setup on UID");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 }

@@ -15,7 +15,7 @@ public class GDXGame extends Game {
     @Override
     public void render(){
         //Drawing method
-        Gdx.gl.glClearColor(0, 0, 1.0f, 1);
+        Gdx.gl.glClearColor(1.00f, 0, 1.0f, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 

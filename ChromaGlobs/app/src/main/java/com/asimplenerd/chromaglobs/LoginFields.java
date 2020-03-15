@@ -41,6 +41,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -228,6 +230,8 @@ public class LoginFields extends Fragment implements View.OnClickListener {
 
     private class AccountManager extends AsyncTask<ProgressBar, Integer, Long>{
 
+        Player p;
+
         @Override
         public Long doInBackground(ProgressBar... pb){
             publishProgress(View.VISIBLE); //Show the progress bar
@@ -238,6 +242,9 @@ public class LoginFields extends Fragment implements View.OnClickListener {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Log.d("Login", "User successfully logged in");
+                        //Retrieve this user's info
+                        p = getInfoAsPlayer(task.getResult());
+                        mainActivity.setPlayer(p);
                         onProgressUpdate(toastUserLoginSuccess);
                     }
                     else{
@@ -284,6 +291,14 @@ public class LoginFields extends Fragment implements View.OnClickListener {
                 loginSuccessful = true;
                 onProgressUpdate(View.GONE);
             }
+        }
+
+        private Player getInfoAsPlayer(AuthResult result){
+            Log.d("AuthResLogin", result.getUser().getUid());
+            String name = "";
+            String id = "-1";
+            ArrayList<Card> ownedCards = new ArrayList<>();
+            return new Player(name, id, ownedCards);
         }
 
     }
