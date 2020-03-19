@@ -245,6 +245,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
                         //Retrieve this user's info
                         p = getInfoAsPlayer(task.getResult());
                         mainActivity.setPlayer(p);
+
                         onProgressUpdate(toastUserLoginSuccess);
                     }
                     else{
@@ -296,7 +297,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
         private Player getInfoAsPlayer(AuthResult result){
             Log.d("AuthResLogin", result.getUser().getUid());
             String name = "";
-            String id = "-1";
+            String id = result.getUser().getUid();
             ArrayList<Card> ownedCards = new ArrayList<>();
             return new Player(name, id, ownedCards);
         }

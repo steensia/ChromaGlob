@@ -50,6 +50,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     private String mParam1;
     private String mParam2;
 
+    private boolean usernamePromptShown = false;
+
     private OnFragmentInteractionListener mListener;
 
     public MainMenuFragment() {
@@ -81,7 +83,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        getUserInfo();
+        if(!usernamePromptShown)
+            getUserInfo();
     }
 
     @Override
@@ -151,25 +154,30 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     }
 
     private void getUserInfo() {
+        usernamePromptShown = true;
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             return;
         }
         db.getReference().child("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-
+        final MainActivity mainActivity = (MainActivity)getActivity();
             private boolean promptShown = false;
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) {
+                if (dataSnapshot.getValue() == null && !promptShown) {
+                    Log.d("UserInfo", "No user");
+                    promptShown = true;
                     //user is brand new. Create its data
                     DatabaseReference info = db.getReference().child("Users");
-                    Player p = new Player("Test", user.getUid(), new ArrayList<Card>());
+                    mainActivity.askForNewUsername(dataSnapshot);
+                    Player p = new Player(((MainActivity) getActivity()).user.username, user.getUid(), new ArrayList<Card>());
                     Map playerList = new HashMap<>();
                     playerList.put(user.getUid(), p);
                     info.updateChildren(playerList);
                     Log.d("DBMod", "Added UID Field to Users db");
+                    ((MainActivity) getActivity()).askForNewUsername(dataSnapshot);
                 }
                 else{
                     Log.d("DBMod", "User already setup on UID");
