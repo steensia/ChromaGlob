@@ -21,6 +21,7 @@ import android.os.Message;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -215,8 +216,12 @@ public class LoginFields extends Fragment implements View.OnClickListener {
         }
         username = usernameField.getText().toString().trim();
         password = passwordField.getText().toString().trim();
-        if(username.isEmpty()){
+        if(username.trim().isEmpty()){
             Toast.makeText(getContext(), "Username cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(username).matches()){
+            Toast.makeText(getContext(), "Email is invalid!", Toast.LENGTH_SHORT).show();
             return;
         }
         if(password.isEmpty()){
