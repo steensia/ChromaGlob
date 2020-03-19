@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,6 +149,10 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
         }
         if(!pword.equals(conf)){
             Toast.makeText(getContext(), "Passwords do not match!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(uname).matches()){
+            Toast.makeText(getContext(), "Email is invalid!", Toast.LENGTH_SHORT).show();
             return;
         }
         signUpIfNewUser(uname, conf);
