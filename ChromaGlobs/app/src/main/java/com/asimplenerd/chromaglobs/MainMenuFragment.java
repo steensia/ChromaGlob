@@ -83,8 +83,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        if(!usernamePromptShown)
-            getUserInfo();
     }
 
     @Override
@@ -116,6 +114,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        getUserInfo();
     }
 
     @Override
@@ -177,7 +181,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                     playerList.put(user.getUid(), p);
                     info.updateChildren(playerList);
                     Log.d("DBMod", "Added UID Field to Users db");
-                    ((MainActivity) getActivity()).askForNewUsername(dataSnapshot);
                 }
                 else{
                     Log.d("DBMod", "User already setup on UID");
