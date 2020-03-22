@@ -1,6 +1,4 @@
-package com.asimplenerd.chromaglobs
-
-import java.io.Serializable
+package com.asimplenerd.chromaglobs.Classes
 
 class Player{
     lateinit var username : String

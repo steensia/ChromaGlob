@@ -1,4 +1,4 @@
-package com.asimplenerd.chromaglobs;
+package com.asimplenerd.chromaglobs.LoginActivityMap;
 
 import android.content.Context;
 import android.net.Uri;
@@ -18,6 +18,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.asimplenerd.chromaglobs.Classes.Card;
+import com.asimplenerd.chromaglobs.MainActivity;
+import com.asimplenerd.chromaglobs.MainMenuFragment;
+import com.asimplenerd.chromaglobs.Classes.Player;
+import com.asimplenerd.chromaglobs.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,12 +34,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LoginFields.OnFragmentInteractionListener} interface
+ * {@link LoginFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LoginFields#newInstance} factory method to
+ * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFields extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,7 +68,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
 
     private boolean loginSuccessful = false;
 
-    public LoginFields() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -76,8 +81,8 @@ public class LoginFields extends Fragment implements View.OnClickListener {
      * @return A new instance of fragment LoginFields.
      */
     // TODO: Rename and change types and number of parameters
-    public static LoginFields newInstance(String param1, String param2) {
-        LoginFields fragment = new LoginFields();
+    public static LoginFragment newInstance(String param1, String param2) {
+        LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -292,12 +297,12 @@ public class LoginFields extends Fragment implements View.OnClickListener {
 
     private void resetPassword(View view) {
         Log.d("Password", "Reset requested");
-        ((MainActivity) getActivity()).swapToNewFragment(new ForgotPassword(), true);
+        ((MainActivity) getActivity()).swapToNewFragment(new ForgotPasswordFragment(), true);
     }
 
     private void createNewAccount(View view) {
 
         Log.d("Account", "New account creation requested");
-        ((MainActivity) getActivity()).swapToNewFragment(new CreateAccountFragment(), true);
+        ((MainActivity) getActivity()).swapToNewFragment(new SignUpFragment(), true);
     }
 }

@@ -1,4 +1,4 @@
-package com.asimplenerd.chromaglobs
+package com.asimplenerd.chromaglobs.Classes
 
 class Card {
 
@@ -27,7 +27,7 @@ class Card {
         return name
     }
 
-    fun getCardType() : GlobType{
+    fun getCardType() : GlobType {
         return type
     }
 

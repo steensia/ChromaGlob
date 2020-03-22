@@ -1,8 +1,6 @@
 package com.asimplenerd.chromaglobs;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,13 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
+import com.asimplenerd.chromaglobs.Classes.Card;
+import com.asimplenerd.chromaglobs.Classes.Player;
+import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

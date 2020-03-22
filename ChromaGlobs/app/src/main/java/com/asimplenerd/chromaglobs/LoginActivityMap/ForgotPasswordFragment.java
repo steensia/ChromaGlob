@@ -1,25 +1,34 @@
-package com.asimplenerd.chromaglobs;
+package com.asimplenerd.chromaglobs.LoginActivityMap;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.asimplenerd.chromaglobs.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TradeSetupFragment.OnFragmentInteractionListener} interface
+ * {@link ForgotPasswordFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TradeSetupFragment#newInstance} factory method to
+ * Use the {@link ForgotPasswordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TradeSetupFragment extends Fragment {
+public class ForgotPasswordFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +40,11 @@ public class TradeSetupFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TradeSetupFragment() {
+    private EditText emailField;
+
+    private Button resetButton;
+
+    public ForgotPasswordFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +54,11 @@ public class TradeSetupFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TradeSetupFragment.
+     * @return A new instance of fragment ForgotPassword.
      */
     // TODO: Rename and change types and number of parameters
-    public static TradeSetupFragment newInstance(String param1, String param2) {
-        TradeSetupFragment fragment = new TradeSetupFragment();
+    public static ForgotPasswordFragment newInstance(String param1, String param2) {
+        ForgotPasswordFragment fragment = new ForgotPasswordFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,24 +79,17 @@ public class TradeSetupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trade_setup, container, false);
+        View view = inflater.inflate(R.layout.fragment_forgot_password, container, false);
+        emailField = view.findViewById(R.id.emailField);
+        resetButton = view.findViewById(R.id.resetPassButton);
+        resetButton.setOnClickListener(this);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -106,5 +112,36 @@ public class TradeSetupFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.resetPassButton:
+                resetPassword();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void resetPassword(){
+        String emailAddr = emailField.getText().toString().trim();
+        if(emailAddr.isEmpty()){
+            Toast.makeText(getContext(), "Email must be provided!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.sendPasswordResetEmail(emailAddr).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    Log.d("ResetPass", "Password reset email should have been sent");
+                    Toast.makeText(getContext(), "Password reset link sent!", Toast.LENGTH_SHORT).show();
+                    getFragmentManager().popBackStack();
+                }
+                else
+                    Log.d("ResetPass", "Password reset failed: " + task.getException().toString());
+            }
+        });
     }
 }
