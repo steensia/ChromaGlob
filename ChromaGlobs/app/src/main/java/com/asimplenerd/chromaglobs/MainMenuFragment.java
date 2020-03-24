@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.asimplenerd.chromaglobs.Classes.Card;
 import com.asimplenerd.chromaglobs.Classes.Player;
+import com.asimplenerd.chromaglobs.SettingsActivityMap.SettingsFragment;
 import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -91,6 +92,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         view.findViewById(R.id.collectionButton).setOnClickListener(this);
         view.findViewById(R.id.missionsButton).setOnClickListener(this);
         view.findViewById(R.id.shopButton).setOnClickListener(this);
+        view.findViewById(R.id.settingsButton).setOnClickListener(this);
+
         return view;
     }
 
@@ -125,9 +128,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 ((MainActivity)getActivity()).launchGameActivity();
                 break;
             case R.id.tradeButton:
-                //Move to the trade fragment, and prepare for a trade
+                // Move to the trade fragment, and prepare for a trade
                 setupTrade();
                 break;
+            case R.id.settingsButton:
+                // Move to the settings fragment
+                setupSettings();
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -151,6 +157,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 
     private void setupTrade(){
         ((MainActivity) getActivity()).swapToNewFragment(new TradeSetupFragment(), true);
+    }
+
+    private void setupSettings() {
+        ((MainActivity) getActivity()).swapToNewFragment(new SettingsFragment(), true);
     }
 
     private void getUserInfo() {
