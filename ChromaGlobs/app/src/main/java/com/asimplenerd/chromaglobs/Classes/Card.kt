@@ -1,4 +1,4 @@
-package com.asimplenerd.chromaglobs
+package com.asimplenerd.chromaglobs.Classes
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -47,7 +47,7 @@ class Card() : Parcelable{
         return name
     }
 
-    fun getCardType() : GlobType{
+    fun getCardType() : GlobType {
         return type
     }
 

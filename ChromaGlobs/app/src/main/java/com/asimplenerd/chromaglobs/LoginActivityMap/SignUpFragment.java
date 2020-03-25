@@ -1,4 +1,4 @@
-package com.asimplenerd.chromaglobs;
+package com.asimplenerd.chromaglobs.LoginActivityMap;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.asimplenerd.chromaglobs.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,13 +27,13 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CreateAccountFragment.OnFragmentInteractionListener} interface
+ * {@link SignUpFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CreateAccountFragment#newInstance} factory method to
+ * Use the {@link SignUpFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 
-public class CreateAccountFragment extends Fragment implements View.OnClickListener {
+public class SignUpFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,7 +59,7 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
 
     private String username, password;
 
-    public CreateAccountFragment() {
+    public SignUpFragment() {
         // Required empty public constructor
     }
 
@@ -71,8 +72,8 @@ public class CreateAccountFragment extends Fragment implements View.OnClickListe
      * @return A new instance of fragment CreateAccountFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CreateAccountFragment newInstance(String param1, String param2) {
-        CreateAccountFragment fragment = new CreateAccountFragment();
+    public static SignUpFragment newInstance(String param1, String param2) {
+        SignUpFragment fragment = new SignUpFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

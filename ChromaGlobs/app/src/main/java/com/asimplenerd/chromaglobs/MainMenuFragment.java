@@ -1,8 +1,6 @@
 package com.asimplenerd.chromaglobs;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,13 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
+import com.asimplenerd.chromaglobs.Classes.Card;
+import com.asimplenerd.chromaglobs.Classes.Player;
+import com.asimplenerd.chromaglobs.SettingsActivityMap.SettingsFragment;
+import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -95,6 +92,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         view.findViewById(R.id.collectionButton).setOnClickListener(this);
         view.findViewById(R.id.missionsButton).setOnClickListener(this);
         view.findViewById(R.id.shopButton).setOnClickListener(this);
+        view.findViewById(R.id.settingsButton).setOnClickListener(this);
+
         return view;
     }
 
@@ -129,9 +128,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 ((MainActivity)getActivity()).launchGameActivity();
                 break;
             case R.id.tradeButton:
-                //Move to the trade fragment, and prepare for a trade
+                // Move to the trade fragment, and prepare for a trade
                 setupTrade();
                 break;
+            case R.id.settingsButton:
+                // Move to the settings fragment
+                setupSettings();
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -160,6 +162,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         ownedCardBundle.putParcelableArrayList("ownedCards", mainActivity.getOwnedCards());
         tradeFrag.setArguments(ownedCardBundle);
         mainActivity.swapToNewFragment(tradeFrag, true);
+    }
+
+    private void setupSettings() {
+        ((MainActivity) getActivity()).swapToNewFragment(new SettingsFragment(), true);
     }
 
     private void getUserInfo() {
