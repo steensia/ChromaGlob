@@ -2,10 +2,8 @@ package com.asimplenerd.chromaglobs.TradeActivityMap;
 
 import android.content.Context;
 import android.net.Uri;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
-import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -13,17 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import com.asimplenerd.chromaglobs.Classes.CardListAdapter;
 import com.asimplenerd.chromaglobs.R;
+import com.asimplenerd.chromaglobs.Classes.Card;
 
 
 /**

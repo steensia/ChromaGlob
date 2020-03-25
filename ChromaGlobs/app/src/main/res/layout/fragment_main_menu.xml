@@ -22,17 +22,21 @@
 
             <ImageButton
                 android:id="@+id/profileButton"
-                android:layout_width="139dp"
+                android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                tools:src="@tools:sample/avatars" />
+                android:background="@android:color/white"
+                android:src="@drawable/user_icon"
+                tools:src="@drawable/user_icon" />
 
             <ImageButton
                 android:id="@+id/settingsButton"
                 android:layout_width="142dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@android:drawable/ic_menu_manage" />
+                android:background="@android:color/white"
+                android:src="@drawable/settings_icon"
+                tools:src="@drawable/settings_icon" />
         </LinearLayout>
 
         <Button

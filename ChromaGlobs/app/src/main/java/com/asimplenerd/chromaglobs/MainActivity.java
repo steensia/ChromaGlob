@@ -14,10 +14,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.asimplenerd.chromaglobs.Classes.GlobType;
+import com.asimplenerd.chromaglobs.Classes.Rarity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.google.firebase.database.ChildEventListener;
 import com.asimplenerd.chromaglobs.Classes.Player;
+import com.asimplenerd.chromaglobs.Classes.Card;
 import com.asimplenerd.chromaglobs.LoginActivityMap.LoginFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
