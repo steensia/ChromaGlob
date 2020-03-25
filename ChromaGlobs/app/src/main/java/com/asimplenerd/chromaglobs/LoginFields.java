@@ -1,25 +1,13 @@
 package com.asimplenerd.chromaglobs;
 
-import android.accounts.Account;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Parcelable;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -28,19 +16,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -120,7 +101,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_login_fields, container, false);
 
         //Find each edit text so we can track them
-        usernameField = view.findViewById(R.id.usernameField);
+        usernameField = view.findViewById(R.id.emailField);
         passwordField = view.findViewById(R.id.passwordField);
 
         //Begin setup for button listeners to use this particular fragment's on click listener
@@ -208,7 +189,7 @@ public class LoginFields extends Fragment implements View.OnClickListener {
 
     private void attemptLogin(View view){
         Log.d("ViewInfo", view.getClass().toString());
-        EditText usernameField = view.findViewById(R.id.usernameField);
+        EditText usernameField = view.findViewById(R.id.emailField);
         EditText passwordField = view.findViewById(R.id.passwordField);
         if(usernameField == null || passwordField == null){
             Log.e("NullFields", "Unable to find the username or password field.");
