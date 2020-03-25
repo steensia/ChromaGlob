@@ -2,6 +2,7 @@ package com.asimplenerd.chromaglobs;
 
 import android.content.Context;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
 import androidx.annotation.LayoutRes;
@@ -11,9 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -27,11 +32,12 @@ import java.util.ArrayList;
  * Use the {@link TradeSetupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TradeSetupFragment extends Fragment {
+public class TradeSetupFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Card selectedCard;
 
     private ArrayList<Card> ownedCards = new ArrayList<>();
     private View cardListView;
@@ -111,7 +117,22 @@ public class TradeSetupFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
+        getView().findViewById(R.id.startTradeButton).setOnClickListener(this);
         populateListView();
+        setupCardPreview();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        ownedCards.clear();
+    }
+
+    @Override
+    public void onClick(View v){
+        if(v.getId() == R.id.startTradeButton){
+            beginNFCTrade();
+        }
     }
 
     /**
@@ -129,10 +150,33 @@ public class TradeSetupFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    private void setActiveCard(Card c){
+        selectedCard = c;
+        ImageView img = getView().findViewById(R.id.cardPreview);
+        //TODO set image based on card info in firebase.
+    }
+
     private void populateListView(){
         ListView listView = getView().findViewById(R.id.ownedCardList);
-        ArrayAdapter<Card> cardAdapter = new ArrayAdapter<Card>(getContext(), R.layout.trade_card_display_layout);
-        listView.setAdapter(cardAdapter);
-        cardAdapter.addAll(ownedCards);
+        final CardListAdapter cardListAdapter = new CardListAdapter(getContext(), R.id.ownedCardList, ownedCards);
+        listView.setAdapter(cardListAdapter);
+        cardListAdapter.addAll(ownedCards);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setActiveCard(cardListAdapter.getItem(position));
+            }
+        });
+    }
+
+    private void setupCardPreview(){
+        ImageView view = getView().findViewById(R.id.cardPreview);
+        view.setImageResource(R.drawable.rainbow_logo);
+    }
+
+    private void beginNFCTrade(){
+        if(selectedCard == null)
+            return;
+        Toast.makeText(getContext(), "Starting trade using card: " + selectedCard.getCardName(), Toast.LENGTH_SHORT).show();
     }
 }
