@@ -1,4 +1,4 @@
-package com.asimplenerd.chromaglobs;
+package com.asimplenerd.chromaglobs.TradeActivityMap;
 
 import android.content.Context;
 import android.net.Uri;
@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import com.asimplenerd.chromaglobs.R;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.asimplenerd.chromaglobs
+package com.asimplenerd.chromaglobs.Classes
 
 /**
  * This class is used to host the current available card ids. Cards need to be fetched from the db?
