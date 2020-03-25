@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -63,6 +65,7 @@ public class MainActivity extends FragmentActivity implements LoginFields.OnFrag
         if(shouldStore){
             ft.addToBackStack(null);
         }
+
         ft.replace(R.id.login_fragment_layout, newFrag).commit();
     }
 
@@ -74,9 +77,6 @@ public class MainActivity extends FragmentActivity implements LoginFields.OnFrag
 
     public void setPlayer(Player p){
         user = p;
-        if(user.username.isEmpty()){
-
-        }
     }
 
     public void askForNewUsername(final DataSnapshot dataSnapshot){
@@ -97,6 +97,17 @@ public class MainActivity extends FragmentActivity implements LoginFields.OnFrag
         });
         dialogBuilder.show();
         Log.d("UsernameInput", "Should be shown");
+    }
+
+    public ArrayList<Card> getOwnedCards(){
+        //For debugging only. Remove
+        generateCards();
+        return user.getOwnedCards();
+    }
+
+    private void generateCards(){
+        Card test = new Card("Test card 1", GlobType.Air, 10, 10, 10, Rarity.Legendary);
+        user.addCard(test);
     }
 
     class UsernameChecker implements ValueEventListener{
@@ -134,7 +145,6 @@ public class MainActivity extends FragmentActivity implements LoginFields.OnFrag
     }
 
     private void validateUsername(String username, DataSnapshot dataSnapshot){
-        boolean nameNotTaken = false;
         //Check the players table to ensure that this username isn't already being used.
         if(!username.trim().isEmpty()) {
             Log.d("UsernameCreation", "Checking for existing user with name: " + username);

@@ -154,7 +154,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     }
 
     private void setupTrade(){
-        ((MainActivity) getActivity()).swapToNewFragment(new TradeSetupFragment(), true);
+        MainActivity mainActivity = (MainActivity)getActivity();
+        TradeSetupFragment tradeFrag = new TradeSetupFragment();
+        Bundle ownedCardBundle = new Bundle();
+        ownedCardBundle.putParcelableArrayList("ownedCards", mainActivity.getOwnedCards());
+        tradeFrag.setArguments(ownedCardBundle);
+        mainActivity.swapToNewFragment(tradeFrag, true);
     }
 
     private void getUserInfo() {

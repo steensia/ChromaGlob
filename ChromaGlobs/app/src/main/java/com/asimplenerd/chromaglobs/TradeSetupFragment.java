@@ -4,11 +4,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 /**
@@ -24,6 +32,9 @@ public class TradeSetupFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private ArrayList<Card> ownedCards = new ArrayList<>();
+    private View cardListView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -59,6 +70,12 @@ public class TradeSetupFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            ArrayList<Card> argCards = getArguments().getParcelableArrayList("ownedCards");
+            if(argCards != null) {
+                Log.d("TradeCard", "Cards are provided!");
+                ownedCards = new ArrayList<>();
+                ownedCards.addAll(argCards);
+            }
         }
     }
 
@@ -66,7 +83,8 @@ public class TradeSetupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trade_setup, container, false);
+        cardListView = inflater.inflate(R.layout.fragment_trade_setup, container, false);
+        return cardListView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -81,9 +99,6 @@ public class TradeSetupFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -91,6 +106,12 @@ public class TradeSetupFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        populateListView();
     }
 
     /**
@@ -106,5 +127,12 @@ public class TradeSetupFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void populateListView(){
+        ListView listView = getView().findViewById(R.id.ownedCardList);
+        ArrayAdapter<Card> cardAdapter = new ArrayAdapter<Card>(getContext(), R.layout.trade_card_display_layout);
+        listView.setAdapter(cardAdapter);
+        cardAdapter.addAll(ownedCards);
     }
 }
