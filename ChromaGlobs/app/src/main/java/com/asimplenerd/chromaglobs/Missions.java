@@ -64,18 +64,13 @@ public class Missions extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_missions, container, false);
-        Daily d = new Daily(false, "doggo!!", false);
-        // TODO: rand select a daily mission
-        addDaily(d);
         return v;
     }
 
-    private void addDaily(Daily d) {
-        TextView status = getView().findViewById(R.id.missionStatus);
-        TextView desc = getView().findViewById(R.id.missionDesc);
-        status.setText(d.getComplete() ? "Complete" : "Incomplete");
-        status.setTextColor(d.getComplete() ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
-        desc.setText(d.getDescription());
-        //TODO: mission button boi
+    @Override
+    public void onStart(){
+        super.onStart();
     }
+
+
 }

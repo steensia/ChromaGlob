@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.asimplenerd.chromaglobs.Classes.Daily;
+import com.asimplenerd.chromaglobs.Classes.MissionType;
 
 
 /**
@@ -23,6 +27,8 @@ public class Dalies extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Daily daily;
 
     public Dalies() {
         // Required empty public constructor
@@ -53,6 +59,10 @@ public class Dalies extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        //Create daily for this display if one does not exist.
+        daily = new Daily(false, "doggo!!", false, MissionType.Gold);
+        //Set daily button action based on mission reward type.
+
     }
 
     @Override
@@ -60,5 +70,22 @@ public class Dalies extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dalies, container, false);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        setupDaily();
+    }
+
+    private void setupDaily() {
+        TextView status = getView().findViewById(R.id.missionStatus);
+        TextView desc = getView().findViewById(R.id.missionDesc);
+        status.setText(daily.getComplete() ? "Complete" : "Incomplete");
+        status.setTextColor(daily.getComplete() ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
+        desc.setText(daily.getDescription());
+
+        //Setup button based on completion status
+        getView().findViewById(R.id.missionsButton).setEnabled(daily.getComplete());
     }
 }
