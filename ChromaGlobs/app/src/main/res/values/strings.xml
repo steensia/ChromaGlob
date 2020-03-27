@@ -6,4 +6,9 @@
     <string name="selectCardText">Select Card</string>
     <string name="cardDisplayDesc">Card Display Area</string>
     <string name="missions_text">Missions</string>
+    <string name="update_file">versionInfo.xml</string>
+    <string name="connection_error">Connection failed!</string>
+    <string name="connection_error_message">Please restart the app and try again! If problems persist, please contact us! The app will now close.</string>
+    <string name="positive_button_default">Okay</string>
+    <string name="card_image_url">cardImages/</string>
 </resources>
