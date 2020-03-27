@@ -8,6 +8,7 @@ class Daily() {
     private lateinit var description : String
     private var claimed = false
     private lateinit var missionType : MissionType
+    private var missionId = -1
 
     constructor(complete: Boolean, description: String, claimed: Boolean) : this(){
         this.complete = complete
@@ -17,6 +18,10 @@ class Daily() {
 
     constructor(complete: Boolean, description: String, claimed: Boolean, missionType: MissionType) : this(complete, description, claimed){
         this.missionType = missionType
+    }
+
+    constructor(complete: Boolean, description: String, claimed: Boolean, missionType: MissionType, missionId : Int) : this(complete, description, claimed, missionType){
+        this.missionId = missionId
     }
 
     fun getComplete() : Boolean {

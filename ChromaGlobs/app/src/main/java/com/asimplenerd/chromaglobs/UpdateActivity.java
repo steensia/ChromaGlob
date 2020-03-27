@@ -11,6 +11,8 @@ import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.asimplenerd.chromaglobs.Classes.Card;
 import com.asimplenerd.chromaglobs.Classes.GlobType;
@@ -124,10 +126,11 @@ public class UpdateActivity extends AppCompatActivity {
         if(!imgDir.exists()){
             imgDir.mkdir();
         }
-
+        Updater updater = new Updater();
+        updater.doInBackground(0);
     }
 
-    private ArrayList fetchCards(){
+    private ArrayList<Card> fetchCards(){
         final ArrayList<Card> cardList = new ArrayList<>();
         Log.d("AppUpdate", "Downloading cards...");
         FirebaseDatabase.getInstance().getReference("CardList").addValueEventListener(new ValueEventListener() {
@@ -236,10 +239,27 @@ public class UpdateActivity extends AppCompatActivity {
 
     class Updater extends AsyncTask<Integer, Integer, Boolean> {
 
+        ArrayList<Card> allCards = new ArrayList<>();
+
         @Override
         protected Boolean doInBackground(Integer... integers) {
-
+            allCards = fetchCards();
             return true;
+        }
+
+        @Override
+        public void onProgressUpdate(Integer... update){
+            int updatePercentage = update[0];
+            if(updatePercentage == 100){
+                launchMainActivity();
+            }
+            else{
+                ProgressBar pb = findViewById(R.id.progressBar);
+                if(updatePercentage == 0)
+                    pb.setVisibility(View.VISIBLE);
+                pb.setProgress(updatePercentage);
+            }
+
         }
     }
 

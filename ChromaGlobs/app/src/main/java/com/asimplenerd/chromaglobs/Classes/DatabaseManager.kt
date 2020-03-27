@@ -18,6 +18,7 @@ var currentCardCount = 0
 var playerOwnsCurrentCard = false
 lateinit var mainActivity : MainActivity
 var playerName = ""
+var missionDesc = ""
 
 fun initialize(main : MainActivity){
     mainActivity = main
@@ -120,5 +121,29 @@ fun getUsername(uid : String){
 
 fun getPlayerGold(player : Player){
     readPlayerGold(player)
+}
+
+fun readMissionDesc(missionId : Int){
+    var dataListener = object : ValueEventListener{
+        override fun onDataChange(p0: DataSnapshot) {
+            if(p0.exists()){
+                missionDesc = p0.getValue() as String
+            }
+            else{
+                Log.w("MissionDesc", "Mission not found")
+            }
+        }
+
+        override fun onCancelled(p0: DatabaseError) {
+            missionDesc = ""
+            Log.w("MissionDesc", "Unable to retrieve mission id.")
+        }
+    }
+    FirebaseDatabase.getInstance().getReference("MissionsList").child(missionId.toString()).addListenerForSingleValueEvent(dataListener)
+}
+
+fun getMissionDesc(missionId : Int) : String{
+    readMissionDesc(missionId)
+    return missionDesc
 }
 

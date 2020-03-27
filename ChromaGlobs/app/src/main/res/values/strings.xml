@@ -11,4 +11,5 @@
     <string name="connection_error_message">Please restart the app and try again! If problems persist, please contact us! The app will now close.</string>
     <string name="positive_button_default">Okay</string>
     <string name="card_image_url">cardImages/</string>
+    <string name="update_text">Updating: </string>
 </resources>
