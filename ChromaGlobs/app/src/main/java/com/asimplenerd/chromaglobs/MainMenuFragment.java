@@ -134,6 +134,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             case R.id.settingsButton:
                 // Move to the settings fragment
                 setupSettings();
+                break;
+            case R.id.missionsButton:
+                setupMissions();
+                break;
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -166,6 +170,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 
     private void setupSettings() {
         ((MainActivity) getActivity()).swapToNewFragment(new SettingsFragment(), true);
+    }
+
+    private void setupMissions() {
+        ((MainActivity) getActivity()).swapToNewFragment(new Missions(), true);
     }
 
     private void getUserInfo() {

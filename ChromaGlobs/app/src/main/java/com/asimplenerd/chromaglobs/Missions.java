@@ -1,5 +1,6 @@
 package com.asimplenerd.chromaglobs;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.asimplenerd.chromaglobs.Classes.Daily;
 
 
 /**
@@ -59,6 +63,19 @@ public class Missions extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_missions, container, false);
+        View v = inflater.inflate(R.layout.fragment_missions, container, false);
+        Daily d = new Daily(false, "doggo!!", false);
+        // TODO: rand select a daily mission
+        addDaily(d);
+        return v;
+    }
+
+    private void addDaily(Daily d) {
+        TextView status = getView().findViewById(R.id.missionStatus);
+        TextView desc = getView().findViewById(R.id.missionDesc);
+        status.setText(d.getComplete() ? "Complete" : "Incomplete");
+        status.setTextColor(d.getComplete() ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
+        desc.setText(d.getDescription());
+        //TODO: mission button boi
     }
 }
