@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.asimplenerd.chromaglobs.Classes.Card;
+import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.MainActivity;
 import com.asimplenerd.chromaglobs.MainMenuFragment;
 import com.asimplenerd.chromaglobs.Classes.Player;
@@ -286,8 +287,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
 
         private Player getInfoAsPlayer(AuthResult result){
+            DatabaseManagerKt.getUsername(result.getUser().getUid());
             Log.d("AuthResLogin", result.getUser().getUid());
-            String name = "";
+            String name = DatabaseManagerKt.getPlayerName();
             String id = result.getUser().getUid();
             ArrayList<Card> ownedCards = new ArrayList<>();
             return new Player(name, id, ownedCards);

@@ -183,7 +183,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         if (user == null) {
             return;
         }
-        db.getReference().child("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getReference().child("Users").child(user.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
         final MainActivity mainActivity = (MainActivity)getActivity();
             private boolean promptShown = false;
 
@@ -203,6 +203,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 }
                 else{
                     Log.d("DBMod", "User already setup on UID");
+                    ((MainActivity) getActivity()).user.username = dataSnapshot.getValue().toString();
+                    Log.d("DBMod", "Username was: " + dataSnapshot.getValue().toString());
                 }
             }
 

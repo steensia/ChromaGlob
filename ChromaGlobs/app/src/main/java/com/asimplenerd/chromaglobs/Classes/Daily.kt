@@ -1,5 +1,7 @@
 package com.asimplenerd.chromaglobs.Classes
 
+import android.util.Log
+
 class Daily() {
 
     private var complete = false
@@ -37,12 +39,26 @@ class Daily() {
         return claimed
     }
 
-    fun claimReward(){
+    fun claimReward(player : Player){
+        when(missionType){
+            MissionType.Card -> addCardToPlayer(player, selectCardReward())
+            MissionType.Gold -> addGoldToPlayer(player, calculateGoldReward())
+        }
         claimed = true
-        TODO("Use mission type to give player rewards")
     }
 
     fun setMissionType(type : MissionType){
         missionType = type
+    }
+
+    fun selectCardReward() : Card{
+        Log.d("CardReward", "Claiming card reward for user")
+        return Card("Test card 2", GlobType.Air, 10, 10, 9, Rarity.Common, 1)
+    }
+
+    private fun calculateGoldReward() : Int{
+        Log.d("GoldReward", "Claiming gold reward for user")
+        //TODO create a formula to update gold count
+        return 10
     }
 }

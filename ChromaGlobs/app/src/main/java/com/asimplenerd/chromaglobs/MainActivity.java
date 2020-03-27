@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.GlobType;
 import com.asimplenerd.chromaglobs.Classes.Rarity;
 import com.badlogic.gdx.utils.Array;
@@ -38,6 +39,7 @@ public class MainActivity extends FragmentActivity implements LoginFragment.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DatabaseManagerKt.initialize(this);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); //Request to start in landscape mode.
         if(findViewById(R.id.login_fragment_layout) != null){
@@ -75,8 +77,15 @@ public class MainActivity extends FragmentActivity implements LoginFragment.OnFr
         startActivity(gameLauncher);
     }
 
+    public Player getPlayer(){
+        if(user == null)
+            throw new NullPointerException("User was requested but no user has been specified");
+        return user;
+    }
+
     public void setPlayer(Player p){
         user = p;
+        Log.d("UserSetup", "User: " + p.username + " has logged in!");
     }
 
     public void askForNewUsername(final DataSnapshot dataSnapshot){
@@ -163,5 +172,7 @@ public class MainActivity extends FragmentActivity implements LoginFragment.OnFr
         else
             askForNewUsername(dataSnapshot);
     }
+
+
 
 }

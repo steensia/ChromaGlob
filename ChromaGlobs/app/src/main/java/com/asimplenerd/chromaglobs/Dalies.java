@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import com.asimplenerd.chromaglobs.Classes.MissionType;
  * Use the {@link Dalies#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Dalies extends Fragment {
+public class Dalies extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,6 +79,14 @@ public class Dalies extends Fragment {
         setupDaily();
     }
 
+    @Override
+    public void onClick(View v){
+        if(v.getId() == R.id.rewardButton){
+            Log.d("ClaimingReward", "User has started claiming a reward");
+            daily.claimReward(((MainActivity)getActivity()).user);
+        }
+    }
+
     private void setupDaily() {
         TextView status = getView().findViewById(R.id.missionStatus);
         TextView desc = getView().findViewById(R.id.missionDesc);
@@ -86,6 +95,7 @@ public class Dalies extends Fragment {
         desc.setText(daily.getDescription());
 
         //Setup button based on completion status
-        getView().findViewById(R.id.missionsButton).setEnabled(daily.getComplete());
+        getView().findViewById(R.id.rewardButton).setEnabled(!daily.getComplete());
+        getView().findViewById(R.id.rewardButton).setOnClickListener(this);
     }
 }
