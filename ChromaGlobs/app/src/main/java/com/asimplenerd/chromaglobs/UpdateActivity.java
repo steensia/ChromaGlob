@@ -49,6 +49,7 @@ public class UpdateActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         checkForApplicationContentUpdate();
+        launchMainActivity();
     }
 
     private void checkForApplicationContentUpdate(){
