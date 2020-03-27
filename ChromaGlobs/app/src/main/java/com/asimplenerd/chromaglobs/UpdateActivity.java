@@ -128,6 +128,7 @@ public class UpdateActivity extends AppCompatActivity {
 
     private void launchMainActivity(){
         Intent mainIntent = new Intent(this, MainActivity.class);
+        finish();
         startActivity(mainIntent);
     }
 
