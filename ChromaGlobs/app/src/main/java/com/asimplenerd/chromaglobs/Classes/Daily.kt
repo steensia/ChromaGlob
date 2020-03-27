@@ -9,6 +9,8 @@ class Daily() {
     private var claimed = false
     private lateinit var missionType : MissionType
     private var missionId = -1
+    // TODO: add a date to missions, so we know when to give new ones.
+    // OR just load a new mission once they've claimed the reward for the completed mission?
 
     constructor(complete: Boolean, description: String, claimed: Boolean) : this(){
         this.complete = complete
@@ -54,6 +56,13 @@ class Daily() {
 
     fun setMissionType(type : MissionType){
         missionType = type
+    }
+
+    fun getMissionRewardType() : String {
+        when(missionType){
+            MissionType.Card -> return "Reward: card"
+            MissionType.Gold -> return "Reward: gold"
+        }
     }
 
     fun selectCardReward() : Card{

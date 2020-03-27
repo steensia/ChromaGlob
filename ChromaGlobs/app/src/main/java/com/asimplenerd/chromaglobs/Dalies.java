@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.asimplenerd.chromaglobs.Classes.Daily;
 import com.asimplenerd.chromaglobs.Classes.MissionType;
 
+import org.w3c.dom.Text;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +63,7 @@ public class Dalies extends Fragment implements View.OnClickListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         //Create daily for this display if one does not exist.
+        // TODO: Randomly pull a description from the DB
         daily = new Daily(false, "doggo!!", false, MissionType.Gold);
         //Set daily button action based on mission reward type.
 
@@ -90,12 +93,14 @@ public class Dalies extends Fragment implements View.OnClickListener {
     private void setupDaily() {
         TextView status = getView().findViewById(R.id.missionStatus);
         TextView desc = getView().findViewById(R.id.missionDesc);
+        TextView type = getView().findViewById(R.id.missionType);
         status.setText(daily.getComplete() ? "Complete" : "Incomplete");
         status.setTextColor(daily.getComplete() ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
         desc.setText(daily.getDescription());
+        type.setText(daily.getMissionRewardType());
 
         //Setup button based on completion status
-        getView().findViewById(R.id.rewardButton).setEnabled(!daily.getComplete());
+        getView().findViewById(R.id.rewardButton).setEnabled(daily.getComplete());
         getView().findViewById(R.id.rewardButton).setOnClickListener(this);
     }
 }

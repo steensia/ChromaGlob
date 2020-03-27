@@ -60,6 +60,7 @@ public class UpdateActivity extends AppCompatActivity {
             imgDir.mkdir();
         }
         checkForApplicationContentUpdate();
+        launchMainActivity();
     }
 
     private void checkForApplicationContentUpdate(){
