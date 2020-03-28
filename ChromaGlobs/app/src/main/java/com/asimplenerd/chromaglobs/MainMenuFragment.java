@@ -134,6 +134,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             case R.id.settingsButton:
                 // Move to the settings fragment
                 setupSettings();
+                break;
+            case R.id.missionsButton:
+                setupMissions();
+                break;
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -168,6 +172,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         ((MainActivity) getActivity()).swapToNewFragment(new SettingsFragment(), true);
     }
 
+    private void setupMissions() {
+        ((MainActivity) getActivity()).swapToNewFragment(new Missions(), true);
+    }
+
     private void getUserInfo() {
         usernamePromptShown = true;
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -175,7 +183,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         if (user == null) {
             return;
         }
-        db.getReference().child("Users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getReference().child("Users").child(user.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
         final MainActivity mainActivity = (MainActivity)getActivity();
             private boolean promptShown = false;
 
@@ -195,6 +203,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 }
                 else{
                     Log.d("DBMod", "User already setup on UID");
+                    ((MainActivity) getActivity()).user.username = dataSnapshot.getValue().toString();
+                    Log.d("DBMod", "Username was: " + dataSnapshot.getValue().toString());
                 }
             }
 

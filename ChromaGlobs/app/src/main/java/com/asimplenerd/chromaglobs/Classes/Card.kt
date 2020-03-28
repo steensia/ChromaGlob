@@ -10,6 +10,7 @@ class Card() : Parcelable{
     private var attackPower = 0
     private var defenseRating = 0
     private lateinit var rarity : Rarity
+    private  var cardId = -1
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()!!
@@ -28,6 +29,10 @@ class Card() : Parcelable{
         this.attackPower = ap
         this.defenseRating = dp
         this.rarity = rarity
+    }
+
+    constructor (name: String, type: GlobType, health: Int, ap: Int, dp: Int, rarity: Rarity, cardId : Int) : this(name, type, health, ap, dp, rarity){
+        this.cardId = cardId
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
@@ -69,6 +74,10 @@ class Card() : Parcelable{
 
     fun restoreHealth(amount : Int){
         modifyHealth(amount)
+    }
+
+    fun getId() : Int{
+        return cardId
     }
 
     override fun toString(): String {
