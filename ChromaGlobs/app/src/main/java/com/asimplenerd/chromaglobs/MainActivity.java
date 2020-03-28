@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +37,10 @@ import java.util.Map;
 public class MainActivity extends FragmentActivity implements LoginFragment.OnFragmentInteractionListener{
     Fragment frag;
     Player user;
+
+    public SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.asimplenerd.chromaglobs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,9 @@ public class MainActivity extends FragmentActivity implements LoginFragment.OnFr
             LoginFragment loginFragment = new LoginFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.login_fragment_layout, loginFragment).commit();
         }
+
+        // mPreferences = this.getPreferences(MODE_PRIVATE);
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
     }
 
     @Override
@@ -172,7 +180,4 @@ public class MainActivity extends FragmentActivity implements LoginFragment.OnFr
         else
             askForNewUsername(dataSnapshot);
     }
-
-
-
 }
