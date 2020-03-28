@@ -1,12 +1,19 @@
 package com.asimplenerd.chromaglobs.SettingsActivityMap;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.ContactsContract;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.asimplenerd.chromaglobs.R;
 
@@ -61,6 +68,45 @@ public class ContactFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contact, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_contact, container, false);
+        final EditText email = rootView.findViewById(R.id.emailText);
+        final EditText issue = rootView.findViewById(R.id.issueText);
+
+        Button submit = rootView.findViewById(R.id.submitButton);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ValidateEmail(email.getText().toString(), issue.getText().toString());
+                email.clearComposingText();
+                issue.clearComposingText();
+            }
+        });
+
+        return rootView;
+    }
+
+    private void ValidateEmail(String email, String issue){
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(getContext(), "Email Invalid", Toast.LENGTH_SHORT).show();
+        }
+        else if(issue.length() < 15){
+            Toast.makeText(getContext(), "Issue must be at least 15 characters", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            // TODO: Send email correctly
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+            emailIntent.setData(Uri.parse("mailto:"));
+            emailIntent.setType("text/plain");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, getResources().getString(R.string.support_email));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Please halp...");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, issue);
+
+            startActivity(emailIntent);
+
+            Toast.makeText(getContext(), "Email Sent", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

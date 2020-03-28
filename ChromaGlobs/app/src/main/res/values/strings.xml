@@ -12,4 +12,6 @@
     <string name="positive_button_default">Okay</string>
     <string name="card_image_url">cardImages/</string>
     <string name="update_text">Updating: </string>
+    <string name="info">This is a test</string>
+    <string name="support_email">chromaglobs@gmail.com</string>
 </resources>

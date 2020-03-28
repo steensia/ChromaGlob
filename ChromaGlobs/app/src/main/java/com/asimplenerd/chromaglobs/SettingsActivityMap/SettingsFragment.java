@@ -1,12 +1,16 @@
 package com.asimplenerd.chromaglobs.SettingsActivityMap;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.asimplenerd.chromaglobs.MainActivity;
 import com.asimplenerd.chromaglobs.R;
 import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
 
@@ -68,6 +73,8 @@ public class SettingsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -75,40 +82,64 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+        final SharedPreferences mPreferences = getContext().getSharedPreferences("com.asimplenerd.chromaglobs", Context.MODE_PRIVATE);
+
         final Switch musicSwitch = rootView.findViewById(R.id.musicSwitch);
         final Switch soundSwitch = rootView.findViewById(R.id.soundSwitch);
         final Button aboutButton = rootView.findViewById(R.id.aboutButton);
         final Button contactButton = rootView.findViewById(R.id.contactButton);
 
+        if(mPreferences != null) {
+            Log.d("NOT NULL", "Preferences not null");
+        }
+
+        if(mPreferences.getBoolean("Music_On", true)) musicSwitch.setChecked(true);
+        else musicSwitch.setChecked(false);
+
         musicSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) return; // turn on music
-                else return; // turn off music
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putBoolean("Music_On", isChecked);
+                editor.apply();
             }
         });
+
+        if(mPreferences.getBoolean("Sound_On", true)) soundSwitch.setChecked(true);
+        else soundSwitch.setChecked(false);
 
         soundSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) return; // turn on music
-                else return; // turn off music
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putBoolean("Sound_On", isChecked);
+                editor.apply();
             }
         });
 
         aboutButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AboutFragment aboutFragment = new AboutFragment();
-                getFragmentManager().beginTransaction().add(R.id.about_fragment_layout, aboutFragment).commit();
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle("About");
+                alert.setMessage(R.string.info);
+
+                alert.setPositiveButton(R.string.positive_button_default, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
             }
         });
 
         contactButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContactFragment  contactFragment = new ContactFragment();
-                getFragmentManager().beginTransaction().add(R.id.contact_fragment_layout, contactFragment).commit();
+                ContactFragment contactFragment = new ContactFragment();
+                ((MainActivity)getActivity()).swapToNewFragment(contactFragment, true);
             }
         });
 
