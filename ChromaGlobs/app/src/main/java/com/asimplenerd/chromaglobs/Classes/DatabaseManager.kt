@@ -9,7 +9,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.lang.Exception
+import java.sql.Date
+import java.util.*
 import java.util.concurrent.CountDownLatch
+import kotlin.collections.HashMap
 
 var playerGold = -1L
 var upToDate = false
@@ -149,3 +152,9 @@ fun getMissionDesc(missionId : Int, daily : Daily){
     readMissionDesc(missionId, daily)
 }
 
+fun updatePlayerLogin(player: Player) {
+
+    var date = Calendar.getInstance().time
+    var db = FirebaseDatabase.getInstance()
+    db.getReference("Users").child(player.id).child("LastLogin").setValue(date)
+}

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.asimplenerd.chromaglobs.Classes.Card;
+import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.Player;
 import com.asimplenerd.chromaglobs.SettingsActivityMap.SettingsFragment;
 import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
@@ -119,6 +120,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     public void onStart(){
         super.onStart();
         getUserInfo();
+        updateUserLogin();
     }
 
     @Override
@@ -214,6 +216,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+
+    }
+
+    private void updateUserLogin() {
+
+        DatabaseManagerKt.updatePlayerLogin(((MainActivity) getActivity()).user);
 
     }
 }
