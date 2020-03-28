@@ -123,11 +123,14 @@ fun getPlayerGold(player : Player){
     readPlayerGold(player)
 }
 
-fun readMissionDesc(missionId : Int){
+fun readMissionDesc(missionId : Int, daily: Daily) {
     var dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             if(p0.exists()){
-                missionDesc = p0.getValue() as String
+                var h = p0.getValue() as HashMap<String, Object>
+                missionDesc = h.get("Description") as String
+                daily.setDescription(missionDesc)
+                Log.d("missionDesc", missionDesc)
             }
             else{
                 Log.w("MissionDesc", "Mission not found")
@@ -142,8 +145,7 @@ fun readMissionDesc(missionId : Int){
     FirebaseDatabase.getInstance().getReference("MissionsList").child(missionId.toString()).addListenerForSingleValueEvent(dataListener)
 }
 
-fun getMissionDesc(missionId : Int) : String{
-    readMissionDesc(missionId)
-    return missionDesc
+fun getMissionDesc(missionId : Int, daily : Daily){
+    readMissionDesc(missionId, daily)
 }
 

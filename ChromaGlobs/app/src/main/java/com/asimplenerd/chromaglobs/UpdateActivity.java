@@ -48,7 +48,7 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        checkForApplicationContentUpdate();
+        //checkForApplicationContentUpdate();
         launchMainActivity();
     }
 

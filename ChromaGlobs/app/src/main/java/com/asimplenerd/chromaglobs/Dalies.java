@@ -11,9 +11,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.asimplenerd.chromaglobs.Classes.Daily;
+import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.MissionType;
 
 import org.w3c.dom.Text;
+
+import java.util.Random;
 
 
 /**
@@ -62,10 +65,6 @@ public class Dalies extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //Create daily for this display if one does not exist.
-        // TODO: Randomly pull a description from the DB
-        daily = new Daily(false, "doggo!!", false, MissionType.Gold);
-        //Set daily button action based on mission reward type.
 
     }
 
@@ -79,6 +78,15 @@ public class Dalies extends Fragment implements View.OnClickListener {
     @Override
     public void onStart(){
         super.onStart();
+
+        //Create daily for this display if one does not exist.
+        // TODO: Randomly pull a description from the DB
+        Random rand = new Random();
+        int id = rand.nextInt(7);
+
+        daily = new Daily(false, "desc", false, MissionType.Gold, id, (TextView) getView().findViewById(R.id.missionDesc));
+        DatabaseManagerKt.getMissionDesc(id, daily);
+
         setupDaily();
     }
 
