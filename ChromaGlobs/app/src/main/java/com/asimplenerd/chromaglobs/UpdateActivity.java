@@ -48,7 +48,18 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        //checkForApplicationContentUpdate();
+        updateApplication();
+    }
+
+    private void updateApplication(){
+        //TODO
+        Log.d("AppUpdate", "Update started");
+        //Create the images dir if it does not exist.
+        File imgDir = new File(getBaseContext().getFilesDir(), "images/");
+        if(!imgDir.exists()){
+            imgDir.mkdir();
+        }
+        checkForApplicationContentUpdate();
         launchMainActivity();
     }
 
@@ -64,7 +75,8 @@ public class UpdateActivity extends AppCompatActivity {
                     Log.d("ServerAppVersion", dataSnapshot.getValue().toString());
                     if(!localVersion.equals(dataSnapshot.getValue())){
                         Log.d("AppUpdate", "Application version mismatch. Updating to version " + dataSnapshot.getValue().toString());
-                        updateApplication();
+                        Updater updater = new Updater();
+                        updater.doInBackground(0);
                     }
                     else{
                         Log.d("AppUpdate", "Application is up to date. No update needed. Starting MainActivity");
@@ -116,127 +128,11 @@ public class UpdateActivity extends AppCompatActivity {
 
     private void launchMainActivity(){
         Intent mainIntent = new Intent(this, MainActivity.class);
+        finish();
         startActivity(mainIntent);
     }
 
-    private void updateApplication(){
-        //TODO
-        Log.d("AppUpdate", "Update started");
-        //Create the images dir if it does not exist.
-        File imgDir = new File(getBaseContext().getFilesDir(), "images/");
-        if(!imgDir.exists()){
-            imgDir.mkdir();
-        }
-        Updater updater = new Updater();
-        updater.doInBackground(0);
-    }
 
-    private ArrayList<Card> fetchCards(){
-        final ArrayList<Card> cardList = new ArrayList<>();
-        Log.d("AppUpdate", "Downloading cards...");
-        FirebaseDatabase.getInstance().getReference("CardList").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Log.d("AppUpdate", "Found card list in remote DB");
-                    Object cardMap = dataSnapshot.getValue();
-                    Log.d("AppUpdate", "Retrieved map of card objects");
-                    Log.d("AppUpdate", "Retrieval type is " + cardMap);
-                    addCards(cardList, cardMap);
-                    Log.d("AppUpdate", "All new cards added to cardlist");
-                }
-                else{
-                    showConnectionError();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                showConnectionError();
-            }
-        });
-        return cardList;
-    }
-
-    private void addCards(ArrayList<Card> dest, Object cardList){
-        ArrayList<HashMap<String, Object>> cardsList = ((ArrayList<HashMap<String, Object>>) cardList);
-        Log.d("CardListType", cardsList.getClass().getName());
-        //Iterate through each card extracting info
-        for(int i = 0; i < cardsList.size(); i++){
-            Card c = mapToCard(cardsList.get(i), i);
-            dest.add(c);
-        }
-    }
-
-    private Card mapToCard(HashMap<String, Object> map, int id){
-        String name = map.get("Name").toString();
-        GlobType type = getGlobType(map.get("Type").toString());
-        int health = Integer.parseInt(map.get("Health").toString());
-        int ap = Integer.parseInt(map.get("AP").toString());
-        int dp = Integer.parseInt(map.get("DP").toString());
-        Rarity rarity = getGlobRarity(map.get("Rarity").toString());
-        int cardId = id;
-        Card c = new Card(name, type, health, ap, dp, rarity, cardId);
-        Log.d("CardCreation", "Card created: " + c.getCardName() + " with id: " + c.getId());
-        //Download the image associated with the card
-        downloadCardImage(map.get("imgSrc").toString() + ".png");
-        return c;
-    }
-
-    private GlobType getGlobType(String typeString){
-        switch(typeString.toLowerCase()){
-            case "air":
-                return GlobType.Air;
-            case "earth":
-                return GlobType.Earth;
-            case "fire":
-                return GlobType.Fire;
-            case "water":
-                return GlobType.Water;
-            case "light":
-                return GlobType.Light;
-            case "dark":
-                return GlobType.Dark;
-            default:
-                return GlobType.Unknown;
-        }
-    }
-
-    private Rarity getGlobRarity(String rarity){
-        switch(rarity.toLowerCase()){
-            case "common":
-                return Rarity.Common;
-            case "uncommon":
-                return Rarity.Uncommon;
-            case "rare":
-                return Rarity.Rare;
-            case "arcane":
-                return Rarity.Arcane;
-            case "unique":
-                return Rarity.Unique;
-            case "legendary":
-                return Rarity.Legendary;
-            case "chroma":
-                return Rarity.Chroma;
-        }
-        return Rarity.Common;
-    }
-
-    private void downloadCardImage(String imageLoc){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        Log.d("ImageFetch", "Retrieving image from " + getResources().getString(R.string.card_image_url) + imageLoc);
-        File image = new File(getBaseContext().getFilesDir(), "images/" + imageLoc);
-        if(!image.exists()){
-            try {
-                image.createNewFile();
-            }catch(IOException e){
-                Log.e("ImageFetch", "Unable to create files! Error: " + e.getLocalizedMessage());
-                return;
-            }
-        }
-        //Fetch the image file
-        storage.getReference(getResources().getString(R.string.card_image_url) + imageLoc).getFile(image);
-    }
 
     class Updater extends AsyncTask<Integer, Integer, Boolean> {
 
@@ -261,6 +157,114 @@ public class UpdateActivity extends AppCompatActivity {
                 pb.setProgress(updatePercentage);
             }
 
+        }
+
+        private ArrayList<Card> fetchCards(){
+            final ArrayList<Card> cardList = new ArrayList<>();
+            Log.d("AppUpdate", "Downloading cards...");
+            FirebaseDatabase.getInstance().getReference("CardList").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        Log.d("AppUpdate", "Found card list in remote DB");
+                        Object cardMap = dataSnapshot.getValue();
+                        Log.d("AppUpdate", "Retrieved map of card objects");
+                        Log.d("AppUpdate", "Retrieval type is " + cardMap);
+                        addCards(cardList, cardMap);
+                        Log.d("AppUpdate", "All new cards added to cardlist");
+                    }
+                    else{
+                        showConnectionError();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    showConnectionError();
+                }
+            });
+            return cardList;
+        }
+
+        private void addCards(ArrayList<Card> dest, Object cardList){
+            ArrayList<HashMap<String, Object>> cardsList = ((ArrayList<HashMap<String, Object>>) cardList);
+            Log.d("CardListType", cardsList.getClass().getName());
+            //Iterate through each card extracting info
+            for(int i = 0; i < cardsList.size(); i++){
+                Card c = mapToCard(cardsList.get(i), i);
+                dest.add(c);
+                publishProgress((100/(i + 1)));
+            }
+        }
+
+        private Card mapToCard(HashMap<String, Object> map, int id){
+            String name = map.get("Name").toString();
+            GlobType type = getGlobType(map.get("Type").toString());
+            int health = Integer.parseInt(map.get("Health").toString());
+            int ap = Integer.parseInt(map.get("AP").toString());
+            int dp = Integer.parseInt(map.get("DP").toString());
+            Rarity rarity = getGlobRarity(map.get("Rarity").toString());
+            int cardId = id;
+            Card c = new Card(name, type, health, ap, dp, rarity, cardId);
+            Log.d("CardCreation", "Card created: " + c.getCardName() + " with id: " + c.getId());
+            //Download the image associated with the card
+            downloadCardImage(map.get("imgSrc").toString() + ".png");
+            return c;
+        }
+
+        private GlobType getGlobType(String typeString){
+            switch(typeString.toLowerCase()){
+                case "air":
+                    return GlobType.Air;
+                case "earth":
+                    return GlobType.Earth;
+                case "fire":
+                    return GlobType.Fire;
+                case "water":
+                    return GlobType.Water;
+                case "light":
+                    return GlobType.Light;
+                case "dark":
+                    return GlobType.Dark;
+                default:
+                    return GlobType.Unknown;
+            }
+        }
+
+        private Rarity getGlobRarity(String rarity){
+            switch(rarity.toLowerCase()){
+                case "common":
+                    return Rarity.Common;
+                case "uncommon":
+                    return Rarity.Uncommon;
+                case "rare":
+                    return Rarity.Rare;
+                case "arcane":
+                    return Rarity.Arcane;
+                case "unique":
+                    return Rarity.Unique;
+                case "legendary":
+                    return Rarity.Legendary;
+                case "chroma":
+                    return Rarity.Chroma;
+            }
+            return Rarity.Common;
+        }
+
+        private void downloadCardImage(String imageLoc){
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            Log.d("ImageFetch", "Retrieving image from " + getResources().getString(R.string.card_image_url) + imageLoc);
+            File image = new File(getBaseContext().getFilesDir(), "images/" + imageLoc);
+            if(!image.exists()){
+                try {
+                    image.createNewFile();
+                }catch(IOException e){
+                    Log.e("ImageFetch", "Unable to create files! Error: " + e.getLocalizedMessage());
+                    return;
+                }
+            }
+            //Fetch the image file
+            storage.getReference(getResources().getString(R.string.card_image_url) + imageLoc).getFile(image);
         }
     }
 
