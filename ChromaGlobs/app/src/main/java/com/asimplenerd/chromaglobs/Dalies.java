@@ -108,7 +108,7 @@ public class Dalies extends Fragment implements View.OnClickListener {
         type.setText(daily.getMissionRewardType());
 
         //Setup button based on completion status
-        getView().findViewById(R.id.rewardButton).setEnabled(daily.getComplete());
+        getView().findViewById(R.id.rewardButton).setEnabled(!daily.getComplete());
         getView().findViewById(R.id.rewardButton).setOnClickListener(this);
     }
 }

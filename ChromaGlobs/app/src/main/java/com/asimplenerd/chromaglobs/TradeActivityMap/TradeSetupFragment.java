@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +19,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import com.asimplenerd.chromaglobs.CardDisplayFragment;
 import com.asimplenerd.chromaglobs.Classes.CardListAdapter;
 import com.asimplenerd.chromaglobs.R;
 import com.asimplenerd.chromaglobs.Classes.Card;
+import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 
 
 /**
@@ -30,7 +34,8 @@ import com.asimplenerd.chromaglobs.Classes.Card;
  * Use the {@link TradeSetupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TradeSetupFragment extends Fragment implements View.OnClickListener {
+public class TradeSetupFragment extends Fragment implements View.OnClickListener, AndroidFragmentApplication.Callbacks {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,6 +50,7 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private CardDisplayFragment cardDisplay = new CardDisplayFragment();
 
     public TradeSetupFragment() {
         // Required empty public constructor
@@ -87,8 +93,8 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        cardListView = inflater.inflate(R.layout.fragment_trade_setup, container, false);
-        return cardListView;
+        View view = inflater.inflate(R.layout.fragment_trade_setup, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -117,7 +123,6 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
         super.onStart();
         getView().findViewById(R.id.startTradeButton).setOnClickListener(this);
         populateListView();
-        setupCardPreview();
     }
 
     @Override
@@ -131,6 +136,11 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
         if(v.getId() == R.id.startTradeButton){
             beginNFCTrade();
         }
+    }
+
+    @Override
+    public void exit() {
+        //TODO
     }
 
     /**
@@ -150,7 +160,6 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
 
     private void setActiveCard(Card c){
         selectedCard = c;
-        ImageView img = getView().findViewById(R.id.cardPreview);
         //TODO set image based on card info in firebase.
     }
 
@@ -163,13 +172,9 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 setActiveCard(cardListAdapter.getItem(position));
+
             }
         });
-    }
-
-    private void setupCardPreview(){
-        ImageView view = getView().findViewById(R.id.cardPreview);
-        view.setImageResource(R.drawable.rainbow_logo);
     }
 
     private void beginNFCTrade(){
