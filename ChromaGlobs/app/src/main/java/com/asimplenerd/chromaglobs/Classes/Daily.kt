@@ -2,7 +2,9 @@ package com.asimplenerd.chromaglobs.Classes
 
 import android.util.Log
 import android.widget.TextView
-import org.w3c.dom.Text
+import com.asimplenerd.chromaglobs.Dailies
+import java.io.File
+import java.io.FileInputStream
 
 class Daily() {
 
@@ -12,6 +14,7 @@ class Daily() {
     private lateinit var missionType : MissionType
     private var missionId = -1
     private lateinit var descriptionField : TextView
+    private lateinit var dailyFrag : Dailies
     // TODO: add a date to missions, so we know when to give new ones.
     // OR just load a new mission once they've claimed the reward for the completed mission?
 
@@ -31,6 +34,22 @@ class Daily() {
 
     constructor(complete: Boolean, description: String, claimed: Boolean, missionType: MissionType, missionId : Int, d : TextView) : this(complete, description, claimed, missionType, missionId){
         this.descriptionField = d
+        var f = File(d.context.applicationContext.filesDir, "missions/$missionId.xml")
+        Log.d("file search", f.absolutePath);
+        if(f.exists())
+        {
+            var fileIn = FileInputStream(f)
+            var desc = fileIn.bufferedReader().readLine()
+            Log.d("mission desc", desc)
+            fileIn.close()
+        }
+        else {
+            Log.d("mission desc", "no file found")
+        }
+    }
+
+    fun setDailyFragment(f : Dailies) {
+        dailyFrag = f
     }
 
     fun getComplete() : Boolean {
@@ -49,6 +68,9 @@ class Daily() {
         description = d
         if(d != null)
             descriptionField.setText(d)
+        if(dailyFrag != null)
+            dailyFrag.updateDescription();
+
     }
 
     fun getClaimed() : Boolean{

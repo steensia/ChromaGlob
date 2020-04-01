@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.style.UpdateLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +15,13 @@ import com.asimplenerd.chromaglobs.Classes.Daily;
 import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.MissionType;
 
-import org.w3c.dom.Text;
-
-import java.util.Random;
-
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Dalies#newInstance} factory method to
+ * Use the {@link Dailies#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Dalies extends Fragment implements View.OnClickListener {
+public class Dailies extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +33,7 @@ public class Dalies extends Fragment implements View.OnClickListener {
 
     private Daily daily;
 
-    public Dalies() {
+    public Dailies() {
         // Required empty public constructor
     }
 
@@ -49,8 +46,8 @@ public class Dalies extends Fragment implements View.OnClickListener {
      * @return A new instance of fragment Dalies.
      */
     // TODO: Rename and change types and number of parameters
-    public static Dalies newInstance(String param1, String param2) {
-        Dalies fragment = new Dalies();
+    public static Dailies newInstance(String param1, String param2) {
+        Dailies fragment = new Dailies();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,27 +62,25 @@ public class Dalies extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dalies, container, false);
+        View v = inflater.inflate(R.layout.fragment_dalies, container, false);
+
+        //Create daily for this display if one does not exist.
+        int id = ((MainActivity) getActivity()).user.nextMissionID();
+        Log.d("mission id", id+" ");
+        daily = new Daily(false, "desc", false, MissionType.Gold, id, (TextView) v.findViewById(R.id.missionDesc));
+
+        return v;
     }
 
     @Override
     public void onStart(){
         super.onStart();
-
-        //Create daily for this display if one does not exist.
-        // TODO: Randomly pull a description from the DB
-
-        int id = ((MainActivity) getActivity()).user.nextMissionID();
-        Log.d("mission id", id+" ");
-        daily = new Daily(false, "desc", false, MissionType.Gold, id, (TextView) getView().findViewById(R.id.missionDesc));
-        DatabaseManagerKt.getMissionDesc(id, daily);
 
         setupDaily();
     }
@@ -99,6 +94,8 @@ public class Dalies extends Fragment implements View.OnClickListener {
     }
 
     private void setupDaily() {
+        DatabaseManagerKt.updatePlayersMissions(((MainActivity)getActivity()).user);
+
         TextView status = getView().findViewById(R.id.missionStatus);
         TextView desc = getView().findViewById(R.id.missionDesc);
         TextView type = getView().findViewById(R.id.missionType);
@@ -110,5 +107,10 @@ public class Dalies extends Fragment implements View.OnClickListener {
         //Setup button based on completion status
         getView().findViewById(R.id.rewardButton).setEnabled(daily.getComplete());
         getView().findViewById(R.id.rewardButton).setOnClickListener(this);
+    }
+
+    public void updateDescription() {
+        TextView desc = getView().findViewById(R.id.missionDesc);
+        desc.setText(daily.getDescription());
     }
 }

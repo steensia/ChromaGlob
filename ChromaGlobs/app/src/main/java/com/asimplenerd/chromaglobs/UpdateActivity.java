@@ -15,10 +15,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.asimplenerd.chromaglobs.Classes.Card;
+import com.asimplenerd.chromaglobs.Classes.Daily;
 import com.asimplenerd.chromaglobs.Classes.GlobType;
 import com.asimplenerd.chromaglobs.Classes.Rarity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlWriter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +33,7 @@ import com.google.firebase.storage.StorageException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +61,15 @@ public class UpdateActivity extends AppCompatActivity {
         File imgDir = new File(getBaseContext().getFilesDir(), "images/");
         if(!imgDir.exists()){
             imgDir.mkdir();
+            Log.d("making img dir", "AHH");
         }
+
+        File missionsDir = new File(getBaseContext().getFilesDir(), "missions/");
+        if(!missionsDir.exists()) {
+            missionsDir.mkdir();
+            Log.d("making missions dir", "AHH");
+        }
+
         checkForApplicationContentUpdate();
         launchMainActivity();
     }
@@ -137,9 +148,11 @@ public class UpdateActivity extends AppCompatActivity {
     class Updater extends AsyncTask<Integer, Integer, Boolean> {
 
         ArrayList<Card> allCards = new ArrayList<>();
+        ArrayList<Daily> allMissions = new ArrayList<>();
 
         @Override
         protected Boolean doInBackground(Integer... integers) {
+            allMissions = fetchMissions();
             allCards = fetchCards();
             return true;
         }
@@ -186,6 +199,34 @@ public class UpdateActivity extends AppCompatActivity {
             return cardList;
         }
 
+        private ArrayList<Daily> fetchMissions() {
+            final ArrayList<Daily> missionsList = new ArrayList<>();
+            Log.d("AppUpdate", "Downloading missions...");
+            FirebaseDatabase.getInstance().getReference("MissionsList").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        Log.d("AppUpdate", "Found mission list in remote DB");
+                        Object missionsMap = dataSnapshot.getValue();
+                        Log.d("AppUpdate", "Retrieved map of mission objects");
+                        Log.d("AppUpdate", "Retrieval type is " + missionsMap);
+                        addMissions(missionsList, missionsMap);
+                        Log.d("AppUpdate", "All new missions added to cardlist");
+                    }
+                    else{
+                        showConnectionError();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    showConnectionError();
+                }
+            });
+
+            return missionsList;
+        }
+
         private void addCards(ArrayList<Card> dest, Object cardList){
             ArrayList<HashMap<String, Object>> cardsList = ((ArrayList<HashMap<String, Object>>) cardList);
             Log.d("CardListType", cardsList.getClass().getName());
@@ -193,6 +234,17 @@ public class UpdateActivity extends AppCompatActivity {
             for(int i = 0; i < cardsList.size(); i++){
                 Card c = mapToCard(cardsList.get(i), i);
                 dest.add(c);
+                publishProgress((100/(i + 1)));
+            }
+        }
+
+        private void addMissions(ArrayList<Daily> dest, Object missionList) {
+            ArrayList<HashMap<String, Object>> missionsList = ((ArrayList<HashMap<String, Object>>) missionList);
+            Log.d("MissionListType", missionsList.getClass().getName());
+            //Iterate through each card extracting info
+            for(int i = 0; i < missionsList.size(); i++){
+                Daily m = mapToMission(missionsList.get(i), i);
+                dest.add(m);
                 publishProgress((100/(i + 1)));
             }
         }
@@ -210,6 +262,25 @@ public class UpdateActivity extends AppCompatActivity {
             //Download the image associated with the card
             downloadCardImage(map.get("imgSrc").toString() + ".png");
             return c;
+        }
+
+        private Daily mapToMission(HashMap<String, Object> map, int id) {
+            String desc = map.get("Description").toString();
+            Daily d = new Daily(false, desc, false);
+            try {
+                File myFile = new File(getBaseContext().getFilesDir() + "missions/" + id + ".xml");
+                if(!myFile.exists())  {
+                    myFile.createNewFile();
+                }
+                XmlWriter writer = new XmlWriter(new FileWriter(myFile));
+                writer.write(desc);
+                writer.close();
+                Log.d("file search", myFile.getAbsolutePath());
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return d;
         }
 
         private GlobType getGlobType(String typeString){

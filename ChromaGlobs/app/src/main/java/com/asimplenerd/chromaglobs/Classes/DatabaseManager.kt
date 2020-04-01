@@ -1,9 +1,11 @@
 package com.asimplenerd.chromaglobs.Classes
 
+import android.content.Context
 import android.util.Log
 import com.asimplenerd.chromaglobs.MainActivity
 import com.google.firebase.database.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 var playerGold = -1L
@@ -167,7 +169,19 @@ fun updatePlayersMissions(player: Player) {
                                 makeNewMissions(player)
                             }
                             else {
-                                repopulateMissions(player)
+                                Log.d("hey fam", "repoopulate missions!!")
+                                db.getReference("Users").child(player.id).child("Missions").addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onCancelled(p0: DatabaseError) {
+                                    }
+
+                                    override fun onDataChange(p0: DataSnapshot) {
+                                        if(p0.exists()) {
+                                            var missionIds = p0.getValue() as ArrayList<Long>
+                                            player.setMissions(missionIds[0].toInt(), missionIds[1].toInt(), missionIds[2].toInt())
+                                        }
+                                    }
+                                })
+                                //repopulateMissions(player)
                             }
                         }
                         else {
@@ -209,16 +223,8 @@ private fun makeNewMissions(player: Player) {
     player.setMissions(id1, id2, id3)
 }
 
-private fun repopulateMissions(player: Player) {
-    FirebaseDatabase.getInstance().getReference("Users").child("Missions").addListenerForSingleValueEvent(object : ValueEventListener{
-        override fun onDataChange(p0: DataSnapshot) {
-            if(p0.exists()) {
-                var map = p0.getValue() as HashMap<String, Long>
-                player.setMissions(map.get("0") as Int, map.get("1") as Int, map.get("2") as Int)
-            }
-        }
-
-        override fun onCancelled(p0: DatabaseError) {
-        }
-    })
+private fun repopulateMissions(player: Player, context : Context) {
+    if(context != null){
+        player.nextMissionID
+    }
 }

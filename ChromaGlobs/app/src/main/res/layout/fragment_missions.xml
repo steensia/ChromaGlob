@@ -23,7 +23,7 @@
 
         <fragment
             android:id="@+id/fragment2"
-            android:name="com.asimplenerd.chromaglobs.Dalies"
+            android:name="com.asimplenerd.chromaglobs.Dailies"
             android:layout_width="90dp"
             android:layout_height="236dp"
             android:layout_marginStart="144dp"
@@ -33,7 +33,7 @@
 
         <fragment
             android:id="@+id/fragment3"
-            android:name="com.asimplenerd.chromaglobs.Dalies"
+            android:name="com.asimplenerd.chromaglobs.Dailies"
             android:layout_width="90dp"
             android:layout_height="236dp"
             android:layout_marginStart="8dp"
@@ -46,7 +46,7 @@
 
         <fragment
             android:id="@+id/fragment4"
-            android:name="com.asimplenerd.chromaglobs.Dalies"
+            android:name="com.asimplenerd.chromaglobs.Dailies"
             android:layout_width="90dp"
             android:layout_height="236dp"
             android:layout_marginStart="16dp"
