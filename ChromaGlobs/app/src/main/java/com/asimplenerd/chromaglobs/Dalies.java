@@ -81,9 +81,9 @@ public class Dalies extends Fragment implements View.OnClickListener {
 
         //Create daily for this display if one does not exist.
         // TODO: Randomly pull a description from the DB
-        Random rand = new Random();
-        int id = rand.nextInt(7);
 
+        int id = ((MainActivity) getActivity()).user.nextMissionID();
+        Log.d("mission id", id+" ");
         daily = new Daily(false, "desc", false, MissionType.Gold, id, (TextView) getView().findViewById(R.id.missionDesc));
         DatabaseManagerKt.getMissionDesc(id, daily);
 
