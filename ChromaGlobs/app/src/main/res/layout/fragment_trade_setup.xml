@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tradeDisplayLayout"
+    android:id="@+id/frameLayout"
     android:layout_width="382dp"
     android:layout_height="382dp"
     tools:context=".TradeSetupFragment">
@@ -11,28 +11,32 @@
         android:id="@+id/ownedCardList"
         android:layout_width="170dp"
         android:layout_height="337dp"
+        app:layout_constraintEnd_toStartOf="@+id/cardPreview"
+        app:layout_constraintHorizontal_bias="0.089"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/cardPreview"
+        android:layout_width="174dp"
+        android:layout_height="202dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.088"
+        tools:src="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/startTradeButton"
         android:layout_width="181dp"
         android:layout_height="65dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginTop="14dp"
         android:text="@string/selectCardText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toEndOf="@+id/ownedCardList" />
-
-    <fragment
-        android:id="@+id/cardDisplayArea"
-        android:name="com.asimplenerd.chromaglobs.CardDisplayFragment"
-        android:layout_width="186dp"
-        android:layout_height="235dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_bias="0.695"
         app:layout_constraintStart_toEndOf="@+id/ownedCardList"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_card_display" />
+        app:layout_constraintTop_toBottomOf="@+id/cardPreview"
+        app:layout_constraintVertical_bias="0.211" />
 </androidx.constraintlayout.widget.ConstraintLayout>
