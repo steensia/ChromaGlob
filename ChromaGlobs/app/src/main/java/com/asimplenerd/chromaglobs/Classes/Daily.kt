@@ -34,13 +34,14 @@ class Daily() {
 
     constructor(complete: Boolean, description: String, claimed: Boolean, missionType: MissionType, missionId : Int, d : TextView) : this(complete, description, claimed, missionType, missionId){
         this.descriptionField = d
-        var f = File(d.context.applicationContext.filesDir, "missions/$missionId.xml")
+        var f = File(d.context.applicationContext.filesDir, "missions/$missionId.txt")
         Log.d("file search", f.absolutePath);
         if(f.exists())
         {
             var fileIn = FileInputStream(f)
             var desc = fileIn.bufferedReader().readLine()
             Log.d("mission desc", desc)
+            this.description = desc
             fileIn.close()
         }
         else {

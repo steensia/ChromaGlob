@@ -30,9 +30,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -268,14 +270,12 @@ public class UpdateActivity extends AppCompatActivity {
             String desc = map.get("Description").toString();
             Daily d = new Daily(false, desc, false);
             try {
-                File myFile = new File(getBaseContext().getFilesDir() + "missions/" + id + ".xml");
-                if(!myFile.exists())  {
-                    myFile.createNewFile();
-                }
-                XmlWriter writer = new XmlWriter(new FileWriter(myFile));
-                writer.write(desc);
+                File myFile = new File(getBaseContext().getFilesDir() + "/missions/",id +".txt");
+                myFile.createNewFile();
+                FileOutputStream writer = new FileOutputStream(myFile);
+                writer.write(desc.getBytes());
+                writer.flush();
                 writer.close();
-                Log.d("file search", myFile.getAbsolutePath());
             }
             catch (IOException e) {
                 e.printStackTrace();
