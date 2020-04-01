@@ -207,7 +207,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 }
                 else{
                     Log.d("DBMod", "User already setup on UID");
-                    ((MainActivity) getActivity()).user.username = dataSnapshot.getValue().toString();
+                    //((MainActivity) getActivity()).user.username = dataSnapshot.getValue().toString();
                     Log.d("DBMod", "Username was: " + dataSnapshot.getValue().toString());
                 }
             }
