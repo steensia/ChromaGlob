@@ -121,8 +121,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         super.onStart();
         getUserInfo();
         updateUserLogin();
-
-        DatabaseManagerKt.updatePlayersMissions(((MainActivity) getActivity()).user);
     }
 
     @Override

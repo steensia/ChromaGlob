@@ -1,9 +1,17 @@
 package com.asimplenerd.chromaglobs.Classes
 
+import android.os.AsyncTask
+import android.renderscript.Sampler
 import android.util.Log
 import com.asimplenerd.chromaglobs.MainActivity
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.lang.Exception
+import java.sql.Date
 import java.util.*
+import java.util.concurrent.CountDownLatch
 import kotlin.collections.HashMap
 
 var playerGold = -1L
@@ -149,76 +157,4 @@ fun updatePlayerLogin(player: Player) {
     var date = Calendar.getInstance().time
     var db = FirebaseDatabase.getInstance()
     db.getReference("Users").child(player.id).child("LastLogin").setValue(date)
-}
-
-fun updatePlayersMissions(player: Player) {
-    var db = FirebaseDatabase.getInstance()
-    var dataListener = object : ValueEventListener{
-        override fun onDataChange(p0: DataSnapshot) {
-            if(p0.exists()){
-                db.getReference("Users").child(player.id).child("LastLogin").addListenerForSingleValueEvent(object : ValueEventListener{
-                    override fun onDataChange(p0: DataSnapshot) {
-                        if(p0.exists()) {
-                            var currentDate = Calendar.getInstance().time
-                            var t = object : GenericTypeIndicator<Date>(){}
-                            var oldDate = p0.getValue(t)
-                            if(currentDate.month != oldDate!!.month || currentDate.date != oldDate!!.date || currentDate.year != oldDate!!.year)
-                            {
-                                makeNewMissions(player)
-                            }
-                            else {
-                                repopulateMissions(player)
-                            }
-                        }
-                        else {
-                            updatePlayerLogin(player)
-                            makeNewMissions(player)
-                        }
-
-                    }
-
-                    override fun onCancelled(p0: DatabaseError) {
-                    }
-                })
-            }
-            else{
-                makeNewMissions(player)
-            }
-        }
-
-        override fun onCancelled(p0: DatabaseError) {
-        }
-    }
-    db.getReference("Users").child(player.id).child("Missions").addListenerForSingleValueEvent(dataListener)
-}
-
-
-private fun makeNewMissions(player: Player) {
-    var stuff = HashMap<String, Any>()
-
-    // no missions exist, create some
-    val rand = Random()
-    var id1 = rand.nextInt(7)
-    stuff.put("0", id1)
-    var id2 = rand.nextInt(7)
-    stuff.put("1", id2)
-    var id3 = rand.nextInt(7)
-    stuff.put("2", id3)
-
-    FirebaseDatabase.getInstance().getReference("Users").child(player.id).child("Missions").updateChildren(stuff)
-    player.setMissions(id1, id2, id3)
-}
-
-private fun repopulateMissions(player: Player) {
-    FirebaseDatabase.getInstance().getReference("Users").child("Missions").addListenerForSingleValueEvent(object : ValueEventListener{
-        override fun onDataChange(p0: DataSnapshot) {
-            if(p0.exists()) {
-                var map = p0.getValue() as HashMap<String, Long>
-                player.setMissions(map.get("0") as Int, map.get("1") as Int, map.get("2") as Int)
-            }
-        }
-
-        override fun onCancelled(p0: DatabaseError) {
-        }
-    })
 }
