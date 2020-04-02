@@ -52,24 +52,12 @@ public class GDXGame extends Game {
 
         shape.setProjectionMatrix(camera.combined);
 
-//        drawCenterLine();
-        ReCoordinate rc = new ReCoordinate();
-
-        shape.begin(ShapeType.Line);
-        shape.setColor(Color.BLACK);
-        Gdx.gl20.glLineWidth(2);
-
-        rc = offset(0, gameH/2, gameW, gameH/2, 0, 0);
-        shape.line(rc.x, rc.y, rc.x2, rc.y2);
-
-        rc = offset(0, 0, 0, 0, 250, 350);
-        shape.rect(rc.x, rc.y, rc.w, rc.h);
-        shape.end();
-
+        drawCenterLine();
     }
 
     @Override
     public void dispose(){
+        batch.dispose();
         shape.dispose();
         super.dispose();
     }
@@ -91,7 +79,7 @@ public class GDXGame extends Game {
 
         shape.begin(ShapeType.Line);
         shape.setColor(Color.BLACK);
-        Gdx.gl20.glLineWidth(2);
+        Gdx.gl20.glLineWidth(3);
         shape.line(rc.x, rc.y, rc.x2, rc.y2);
         shape.end();
     }
@@ -105,8 +93,8 @@ public class GDXGame extends Game {
         rc.x2 = screenW - y2;
         rc.y2 = screenH - x2;
 
-        rc.w = height * -1;
-        rc.h = width * -1;
+        rc.w = width * -1;
+        rc.h = height * -1;
 
         return rc;
     }
