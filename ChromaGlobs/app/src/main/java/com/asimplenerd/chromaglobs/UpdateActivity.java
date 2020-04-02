@@ -72,6 +72,11 @@ public class UpdateActivity extends AppCompatActivity {
             Log.d("making missions dir", "AHH");
         }
 
+        File dirFolder = new File(getApplicationContext().getFilesDir(), "decks/");
+        if(!dirFolder.exists()) {
+            dirFolder.mkdir();
+        }
+
         checkForApplicationContentUpdate();
         launchMainActivity();
     }

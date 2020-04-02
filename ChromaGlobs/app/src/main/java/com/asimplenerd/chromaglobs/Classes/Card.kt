@@ -7,6 +7,7 @@ import android.media.Image
 import android.media.ImageReader
 import android.os.Parcel
 import android.os.Parcelable
+import com.badlogic.gdx.utils.XmlWriter
 import java.io.File
 
 class Card() : Parcelable{
@@ -178,6 +179,21 @@ class Card() : Parcelable{
         override fun newArray(size: Int): Array<Card?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun getRarity() : Rarity{
+        return rarity
+    }
+
+    fun getCardId() : Int{
+        return cardId
+    }
+
+    fun writeXmlTag(writer : XmlWriter, index : Int){
+        writer.element("Card").attribute("name", getCardName()).attribute("index", index)
+                .element("type", getCardType()).element("health", getCardHealth()).element("attack", getAttackPower())
+                .element("special", getSpecialAttackPower()).element("defense", getDefenseRating()).element("mana", getAvailableMana())
+                .element("rarity", getRarity()).element("level", getCardLevel()).element("id", getCardId()).pop()
     }
 
 }
