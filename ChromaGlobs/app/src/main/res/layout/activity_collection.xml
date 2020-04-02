@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/activity_collection">
+        android:id="@+id/frame_holder">
 
         <TextView
             android:id="@+id/collectionLabel"
@@ -65,7 +65,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:id="@+id/card_displays">
 
                 <FrameLayout
                     android:id="@+id/cardEight"

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -26,19 +27,10 @@ public class CollectionActivity extends AppCompatActivity {
     }
 
     private void setupCardDisplay() {
-        ViewGroup viewRoot = (ViewGroup) findViewById(R.id.activity_collection).getRootView();
-
-        for(int i = 0; i < viewRoot.getChildCount() ; i++){
-            if(viewRoot.getChildAt(i) instanceof FrameLayout){
-                Log.d("FrameLayout", "Got a FrameLayout");
-                FrameLayout frameLayout = (FrameLayout) viewRoot.getChildAt(i);
-                CardRenderer cardRenderer = (CardRenderer) frameLayout.getChildAt(0);
-                cardRenderer.setCard(new Card("A", GlobType.Water, 100, 10, 10, Rarity.Common, 0));
-                cardRenderer.invalidate();
-            }
-            else{
-                Log.d("Check Type", viewRoot.getChildAt(i).getClass().getCanonicalName());
-            }
+        ViewGroup viewRoot = (ViewGroup) findViewById(R.id.frame_holder).findViewById(R.id.card_displays);
+        for(int i = 0; i < viewRoot.getChildCount(); ++i){
+            CardRenderer renderer = (CardRenderer)((ViewGroup)viewRoot.getChildAt(i)).getChildAt(0);
+            renderer.setCard(new Card("Test", i % 4 == 0 ? GlobType.Fire : i % 3 == 0 ? GlobType.Dark : i % 2 == 0 ? GlobType.Air : GlobType.Light, 10, 10, 10, Rarity.Chroma, 23 + i));
         }
     }
 }
