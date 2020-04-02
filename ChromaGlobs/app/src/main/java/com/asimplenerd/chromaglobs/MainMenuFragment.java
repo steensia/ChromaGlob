@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.asimplenerd.chromaglobs.Classes.Card;
 import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.Player;
+import com.asimplenerd.chromaglobs.CollectionActivityMap.CollectionFragment;
 import com.asimplenerd.chromaglobs.SettingsActivityMap.SettingsFragment;
 import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -142,6 +143,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             case R.id.missionsButton:
                 setupMissions();
                 break;
+            case R.id.collectionButton:
+                setupCollection();
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -178,6 +181,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 
     private void setupMissions() {
         ((MainActivity) getActivity()).swapToNewFragment(new Missions(), true);
+    }
+
+    private void setupCollection() {
+        ((MainActivity) getActivity()).swapToNewFragment(new CollectionFragment(), true);
     }
 
     private void getUserInfo() {
