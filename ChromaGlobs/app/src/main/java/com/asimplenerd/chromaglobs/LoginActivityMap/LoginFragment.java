@@ -275,7 +275,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 }
             }
             else if(update[0] == toastUserOrPassErr){
-                Toast.makeText(getContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
                 onProgressUpdate(View.GONE);
             }
             else if(update[0] == toastUserLoginSuccess){

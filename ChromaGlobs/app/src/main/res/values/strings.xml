@@ -14,4 +14,13 @@
     <string name="update_text">Updating: </string>
     <string name="info">This is a test</string>
     <string name="support_email">chromaglobs@gmail.com</string>
+    <string name="decks_label">Decks</string>
+    <string name="create_deck_label">Create Deck</string>
+    <string name="collection_label">Collection</string>
+    <string name="deck_one_label">Deck 1</string>
+    <string name="deck_two_label">Deck 2</string>
+    <string name="deck_three_label">Deck 3</string>
+    <string name="deck_four_label">Deck 4</string>
+    <string name="deck_five_label">Deck 5</string>
+    <string name="search_label">Search:</string>
 </resources>

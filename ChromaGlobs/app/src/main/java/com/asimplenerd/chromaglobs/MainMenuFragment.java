@@ -142,6 +142,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             case R.id.missionsButton:
                 setupMissions();
                 break;
+            case R.id.collectionButton:
+                setupCollection();
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -180,6 +182,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         ((MainActivity) getActivity()).swapToNewFragment(new Missions(), true);
     }
 
+    private void setupCollection() {
+        ((MainActivity) getActivity()).startCollectionsActivity();
+    }
+
     private void getUserInfo() {
         usernamePromptShown = true;
         final FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -207,7 +213,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 }
                 else{
                     Log.d("DBMod", "User already setup on UID");
-                    ((MainActivity) getActivity()).user.username = dataSnapshot.getValue().toString();
+                    //((MainActivity) getActivity()).user.username = dataSnapshot.getValue().toString();
                     Log.d("DBMod", "Username was: " + dataSnapshot.getValue().toString());
                 }
             }

@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CollectionActivityMap.CollectionActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frame_holder">
+
+        <TextView
+            android:id="@+id/collectionLabel"
+            android:layout_width="152dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/collection_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintEnd_toStartOf="@+id/deckList"
+            app:layout_constraintHorizontal_bias="0.007"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/searchLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintBottom_toTopOf="@+id/cardView"
+            app:layout_constraintEnd_toStartOf="@+id/deckList"
+            app:layout_constraintHorizontal_bias="0.071"
+            app:layout_constraintStart_toEndOf="@+id/collectionLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.727" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchField"
+            android:layout_width="166dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardView"
+            app:layout_constraintStart_toEndOf="@+id/searchLabel">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <FrameLayout
+            android:id="@+id/cardView"
+            android:layout_width="521dp"
+            android:layout_height="289dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/deckList"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/collectionLabel">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/card_displays">
+
+                <FrameLayout
+                    android:id="@+id/cardEight"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toEndOf="@+id/cardSeven"
+                    app:layout_constraintTop_toBottomOf="@+id/cardFour">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card8"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardSeven"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toEndOf="@+id/cardSix"
+                    app:layout_constraintTop_toBottomOf="@+id/cardThree">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card7"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardSix"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toEndOf="@+id/cardFive"
+                    app:layout_constraintTop_toBottomOf="@+id/cardTwo">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card6"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardFive"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardOne"
+                    app:layout_constraintVertical_bias="0.456">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card5"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardFour"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintStart_toEndOf="@+id/cardThree"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card4"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardThree"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintStart_toEndOf="@+id/cardTwo"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card3"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardTwo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintStart_toEndOf="@+id/cardOne"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card2"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardOne"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/card1"/>
+                </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/deckList"
+            android:layout_width="140dp"
+            android:layout_height="330dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/decksLabel"
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/decks_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <FrameLayout
+                    android:id="@+id/deckOne"
+                    android:layout_width="64dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/decksLabel">
+
+                    <TextView
+                        android:id="@+id/deckOneText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_one_label" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/deckTwo"
+                    android:layout_width="64dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.486"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/deckOne">
+
+                    <TextView
+                        android:id="@+id/deckTwoText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_two_label" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/deckThree"
+                    android:layout_width="64dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.486"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/deckTwo">
+
+                    <TextView
+                        android:id="@+id/deckThreeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_three_label" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/deckFour"
+                    android:layout_width="64dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/deckThree">
+
+                    <TextView
+                        android:id="@+id/deckFourText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_four_label" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/deckFive"
+                    android:layout_width="64dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/deckFour">
+
+                    <TextView
+                        android:id="@+id/deckFiveText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/deck_five_label" />
+                </FrameLayout>
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_deck_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/deckFive"
+                    app:layout_constraintVertical_bias="0.515" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

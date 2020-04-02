@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.GlobType;
 import com.asimplenerd.chromaglobs.Classes.Rarity;
+import com.asimplenerd.chromaglobs.CollectionActivityMap.CollectionActivity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.google.firebase.database.ChildEventListener;
@@ -31,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +69,11 @@ public class MainActivity extends FragmentActivity implements LoginFragment.OnFr
     @Override
     public void onFragmentInteraction(Uri uri) {
         Log.d("Fragment", "Got uri: " + uri.toString());
+    }
+
+    public void startCollectionsActivity(){
+        Intent intent = new Intent(this, CollectionActivity.class);
+        startActivity(intent);
     }
 
     public void swapToNewFragment(Fragment newFrag, boolean shouldStore){
