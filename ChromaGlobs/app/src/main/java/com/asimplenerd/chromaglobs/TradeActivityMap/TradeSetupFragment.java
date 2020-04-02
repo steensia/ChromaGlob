@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -18,6 +19,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import com.asimplenerd.chromaglobs.Classes.CardListAdapter;
+import com.asimplenerd.chromaglobs.Classes.CardRenderer;
+import com.asimplenerd.chromaglobs.Classes.GlobType;
+import com.asimplenerd.chromaglobs.Classes.Rarity;
 import com.asimplenerd.chromaglobs.R;
 import com.asimplenerd.chromaglobs.Classes.Card;
 
@@ -36,6 +40,7 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private Card selectedCard;
+    private CardRenderer renderer;
 
     private ArrayList<Card> ownedCards = new ArrayList<>();
     private View cardListView;
@@ -88,6 +93,9 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         cardListView = inflater.inflate(R.layout.fragment_trade_setup, container, false);
+        FrameLayout frameLayout = cardListView.findViewById(R.id.cardPreview);
+        Log.d("FrameLayout Children", frameLayout.getChildCount() + "");
+        renderer = frameLayout.findViewById(R.id.cardRenderArea);
         return cardListView;
     }
 
@@ -150,7 +158,7 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
 
     private void setActiveCard(Card c){
         selectedCard = c;
-        ImageView img = getView().findViewById(R.id.cardPreview);
+        renderer.setCard(c);
         //TODO set image based on card info in firebase.
     }
 
@@ -158,7 +166,9 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
         ListView listView = getView().findViewById(R.id.ownedCardList);
         final CardListAdapter cardListAdapter = new CardListAdapter(getContext(), R.id.ownedCardList, ownedCards);
         listView.setAdapter(cardListAdapter);
+        cardListAdapter.clear(); //prevent owned cards from multiplying
         cardListAdapter.addAll(ownedCards);
+        cardListAdapter.add(new Card("Angry", GlobType.Fire, 10, 10, 10, Rarity.Common, 32));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -168,8 +178,7 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
     }
 
     private void setupCardPreview(){
-        ImageView view = getView().findViewById(R.id.cardPreview);
-        view.setImageResource(R.drawable.rainbow_logo);
+
     }
 
     private void beginNFCTrade(){
