@@ -4,17 +4,23 @@ import android.util.Log;
 
 import com.asimplenerd.chromaglobs.GDXGame;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -31,8 +37,8 @@ public class MainScreen implements Screen {
     public MainScreen(GDXGame game){
         parent = game;
 
-        screenW = Gdx.graphics.getWidth();
-        screenH = Gdx.graphics.getHeight();
+        screenW = GDXGame.getScreenWidth();
+        screenH = GDXGame.getScreenHeight();
 
         player = new Texture(Gdx.files.internal("Player.png"));
         opponent = new Texture(Gdx.files.internal("Opponent.png"));
@@ -44,7 +50,7 @@ public class MainScreen implements Screen {
         setUpButtons();
     }
 
-    public void setUpButtons(){
+    private void setUpButtons(){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -60,6 +66,39 @@ public class MainScreen implements Screen {
         table.add(quit).padBottom(20).fillX().uniform();
         table.row();
         table.add(settings).fillX().uniform();
+
+        quit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quitDialog();
+            }
+        });
+    }
+
+    private void quitDialog(){
+        Dialog dialog = new Dialog("Warning", GDXGame.gameSkin) {
+            public void result(Object obj){
+                System.out.println("result " + obj);
+            }
+        };
+        Label text = new Label("Are you sure you want to quit?\n"
+        + "If you quit now, this will count as an automatic forfeit for you.", GDXGame.gameSkin);
+        text.setFontScale(2);
+        text.setWrap(false);
+
+        dialog.getContentTable().add(text).pad(40);
+
+        dialog.button("Yes", true);
+        dialog.button("No", false);
+        dialog.key(Input.Keys.ENTER, true);
+
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.setResizable(false);
+
+        dialog.setName("quitDialog");
+        dialog.show(stage);
+        stage.addActor(dialog);
     }
 
     @Override

@@ -20,13 +20,21 @@ public class GDXGame extends Game {
     private MainScreen mainScreen;
     private EndScreen endScreen;
 
+    private float screenW, screenH;
+
     public final static int MAIN = 0;
     public final static int END = 1;
+
+    public static float getScreenWidth(){  return Gdx.graphics.getWidth(); }
+    public static float getScreenHeight(){  return Gdx.graphics.getHeight(); }
 
     @Override
     public void create() {
         gameSkin = new Skin(Gdx.files.internal("skin/rainbow/rainbow-ui.json"));
         this.setScreen(new MainScreen(this));
+
+        screenW = Gdx.graphics.getWidth();
+        screenH = Gdx.graphics.getHeight();
     }
 
     public void render(){
