@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -24,6 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import static com.badlogic.gdx.scenes.scene2d.InputEvent.Type.exit;
+
 // part of tutorial Full libgdx Game Tutorial
 // https://www.gamedevelopment.blog/full-libgdx-game-tutorial-flgt-home/
 public class MainScreen implements Screen {
@@ -33,6 +36,7 @@ public class MainScreen implements Screen {
     private Texture board, player, opponent;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private boolean quitDialogShown = false;
 
     public MainScreen(GDXGame game){
         parent = game;
@@ -54,6 +58,15 @@ public class MainScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        stage.addListener(new InputListener(){
+           @Override
+           public boolean keyDown(InputEvent event, int keyCode){
+               if(keyCode == Input.Keys.BACK && !quitDialogShown)
+                   quitDialog();
+               return false;
+           }
+        });
+
         Table table = new Table();
         table.setFillParent(true);
         table.setDebug(true);
@@ -70,15 +83,23 @@ public class MainScreen implements Screen {
         quit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                quitDialog();
+                if(!quitDialogShown)
+                    quitDialog();
             }
         });
     }
 
     private void quitDialog(){
+        quitDialogShown = true;
         Dialog dialog = new Dialog("Warning", GDXGame.gameSkin) {
             public void result(Object obj){
                 System.out.println("result " + obj);
+                if(obj instanceof Boolean && (Boolean)obj){
+                    forfeitMatch();
+                }
+                else{
+                    quitDialogShown = false;
+                }
             }
         };
         Label text = new Label("Are you sure you want to quit?\n"
@@ -91,14 +112,32 @@ public class MainScreen implements Screen {
         dialog.button("Yes", true);
         dialog.button("No", false);
         dialog.key(Input.Keys.ENTER, true);
-
         dialog.setModal(true);
         dialog.setMovable(false);
         dialog.setResizable(false);
 
+
         dialog.setName("quitDialog");
         dialog.show(stage);
         stage.addActor(dialog);
+
+    }
+
+    private void forfeitMatch(){
+        //TODO place logic for forfeiting a match here
+        try {
+            Log.d("Forfeit", "Player has forfeited the match! Returning to main activity!");
+            parent.quit();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
+
+    public boolean keyDown(int keycode){
+        if(keycode == Input.Keys.BACK){
+            quitDialog();
+        }
+        return false;
     }
 
     @Override

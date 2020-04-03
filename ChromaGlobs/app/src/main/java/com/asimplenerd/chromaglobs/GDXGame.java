@@ -7,6 +7,7 @@ import com.asimplenerd.chromaglobs.Game.LoadingScreen;
 import com.asimplenerd.chromaglobs.Game.MainScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -32,7 +33,7 @@ public class GDXGame extends Game {
     public void create() {
         gameSkin = new Skin(Gdx.files.internal("skin/rainbow/rainbow-ui.json"));
         this.setScreen(new MainScreen(this));
-
+        Gdx.input.setCatchKey(Input.Keys.BACK, true); //handle the back arrow press
         screenW = Gdx.graphics.getWidth();
         screenH = Gdx.graphics.getHeight();
     }
@@ -61,5 +62,9 @@ public class GDXGame extends Game {
                     endScreen = new EndScreen(this);
                 this.setScreen(endScreen);
         }
+    }
+
+    public void quit(){
+        Gdx.app.exit();
     }
 }
