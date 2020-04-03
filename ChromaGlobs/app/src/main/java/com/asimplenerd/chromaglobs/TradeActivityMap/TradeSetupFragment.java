@@ -168,7 +168,7 @@ public class TradeSetupFragment extends Fragment implements View.OnClickListener
         listView.setAdapter(cardListAdapter);
         cardListAdapter.clear(); //prevent owned cards from multiplying
         cardListAdapter.addAll(ownedCards);
-        cardListAdapter.add(new Card("Angry", GlobType.Fire, 10, 10, 10, Rarity.Common, 32));
+        cardListAdapter.add(new Card("Angry", GlobType.Fire, 10, 10, 10, Rarity.Uncommon, 32));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

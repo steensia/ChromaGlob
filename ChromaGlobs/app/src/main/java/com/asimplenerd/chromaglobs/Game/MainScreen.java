@@ -133,13 +133,6 @@ public class MainScreen implements Screen {
         }
     }
 
-    public boolean keyDown(int keycode){
-        if(keycode == Input.Keys.BACK){
-            quitDialog();
-        }
-        return false;
-    }
-
     @Override
     public void show() {
 

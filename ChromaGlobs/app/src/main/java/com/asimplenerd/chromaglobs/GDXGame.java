@@ -65,6 +65,9 @@ public class GDXGame extends Game {
     }
 
     public void quit(){
+        this.dispose();
+        mainScreen.dispose();
+        endScreen.dispose();
         Gdx.app.exit();
     }
 }

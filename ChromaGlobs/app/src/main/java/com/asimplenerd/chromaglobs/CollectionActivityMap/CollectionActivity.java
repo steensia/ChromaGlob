@@ -37,6 +37,7 @@ public class CollectionActivity extends AppCompatActivity {
         ViewGroup viewRoot = (ViewGroup) findViewById(R.id.frame_holder).findViewById(R.id.card_displays);
         for(int i = 0; i < viewRoot.getChildCount(); ++i){
             CardRenderer renderer = (CardRenderer)((ViewGroup)viewRoot.getChildAt(i)).getChildAt(0);
+            renderer.setResolution(100, 100);
             renderer.setCard(new Card("Test", i % 4 == 0 ? GlobType.Fire : i % 3 == 0 ? GlobType.Dark : i % 2 == 0 ? GlobType.Air : GlobType.Light, 10, 10, 10, Rarity.Chroma, 23 + i));
         }
     }

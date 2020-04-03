@@ -74,12 +74,16 @@ class Card() : Parcelable{
         return health
     }
 
-    fun getCardImage(context: Context) : Bitmap{
+    fun getCardImage(context: Context, scaleFactorX : Int, scaleFactorY : Int) : Bitmap{
         var name = getLetter(cardId)
         var bmap = File(context.filesDir,  "images/$name.png")
         var loadedImage = BitmapFactory.decodeFile(bmap.absolutePath)
-        val image = Bitmap.createScaledBitmap(loadedImage, loadedImage.width / 3, loadedImage.height / 3, false)
+        val image = Bitmap.createScaledBitmap(loadedImage, loadedImage.width / scaleFactorX, loadedImage.height / scaleFactorY, false)
         return image
+    }
+
+    fun getScaledCardImage(context: Context, width : Int, height : Int){
+
     }
 
     private fun getLetter(index : Int) : String{
