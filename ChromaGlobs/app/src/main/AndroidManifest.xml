@@ -20,10 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChromaGlobsGame" />
+        <activity android:name=".ChromaGlobsGame"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

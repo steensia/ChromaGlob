@@ -1,4 +1,4 @@
-package com.asimplenerd.chromaglobs;
+package com.asimplenerd.chromaglobs.Game;
 
 /**
  * A holder object to contain the new coordinates for the new objects.
