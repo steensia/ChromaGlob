@@ -41,6 +41,25 @@ public class MainScreen implements Screen {
         camera.setToOrtho(false, screenW, screenH);
         batch = new SpriteBatch();
 
+        setUpButtons();
+    }
+
+    public void setUpButtons(){
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        Table table = new Table();
+        table.setFillParent(true);
+        table.setDebug(true);
+        stage.addActor(table);
+
+        table.right();
+        table.pad(50);
+        TextButton quit = new TextButton("Quit", GDXGame.gameSkin);
+        TextButton settings = new TextButton("Settings", GDXGame.gameSkin);
+        table.add(quit).padBottom(20).fillX().uniform();
+        table.row();
+        table.add(settings).fillX().uniform();
     }
 
     @Override
@@ -56,12 +75,16 @@ public class MainScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(opponent, 0, screenH - opponent.getHeight());
+        batch.draw(player, 0, 0);
         batch.end();
+
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        //stage.getViewport().update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -82,5 +105,6 @@ public class MainScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
     }
 }

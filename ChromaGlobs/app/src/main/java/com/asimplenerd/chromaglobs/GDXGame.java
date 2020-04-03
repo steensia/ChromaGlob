@@ -25,7 +25,7 @@ public class GDXGame extends Game {
 
     @Override
     public void create() {
-        gameSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        gameSkin = new Skin(Gdx.files.internal("skin/rainbow/rainbow-ui.json"));
         this.setScreen(new MainScreen(this));
     }
 
