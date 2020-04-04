@@ -22,6 +22,7 @@ class Card() : Parcelable{
     private  var cardId = -1
     private var level = 10
     private var mana = 99
+    private var image : Bitmap? = null
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()!!
@@ -47,8 +48,8 @@ class Card() : Parcelable{
     }
 
     constructor(fileName : String) : this() {
-        var reader = XmlReader();
-        var element = reader.parse(fileName)
+        val reader = XmlReader()
+        val element = reader.parse(fileName)
         this.name = element.getAttribute("name")
         this.type = stringToGlobType(element.get("type"))
         this.health = element.getInt("health")
@@ -91,16 +92,15 @@ class Card() : Parcelable{
     }
 
     fun getCardImage(context: Context, scaleFactorX : Int, scaleFactorY : Int) : Bitmap{
-        var name = getLetter(cardId)
-        var bmap = File(context.filesDir,  "images/$name.png")
-        var loadedImage = BitmapFactory.decodeFile(bmap.absolutePath)
-        val image = Bitmap.createScaledBitmap(loadedImage, loadedImage.width / scaleFactorX, loadedImage.height / scaleFactorY, false)
-        return image
+        if(image == null){
+        val name = getLetter(cardId)
+        val bmap = File(context.filesDir,  "images/$name.png")
+        val loadedImage = BitmapFactory.decodeFile(bmap.absolutePath)
+        image = Bitmap.createScaledBitmap(loadedImage, loadedImage.width / scaleFactorX, loadedImage.height / scaleFactorY, false)
+        }
+        return image!!
     }
 
-    fun getScaledCardImage(context: Context, width : Int, height : Int){
-
-    }
 
     private fun getLetter(index : Int) : String{
         when(index){

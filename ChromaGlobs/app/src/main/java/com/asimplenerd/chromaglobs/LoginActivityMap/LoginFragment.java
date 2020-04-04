@@ -250,7 +250,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             try{Thread.sleep(2000);}
             catch(Exception e){}
             //Looper.prepare();
-            publishProgress(View.GONE);
+            //publishProgress(View.GONE);
             return 0L;
         }
 
