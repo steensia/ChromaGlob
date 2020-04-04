@@ -10,12 +10,14 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asimplenerd.chromaglobs.Classes.Card;
@@ -24,6 +26,7 @@ import com.asimplenerd.chromaglobs.MainActivity;
 import com.asimplenerd.chromaglobs.MainMenuFragment;
 import com.asimplenerd.chromaglobs.Classes.Player;
 import com.asimplenerd.chromaglobs.R;
+import com.badlogic.gdx.Input;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -120,6 +123,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         loginBtn.setOnClickListener(this);
         signUpBtn.setOnClickListener(this);
         forgotPasswordBtn.setOnClickListener(this);
+
+        //Set enter on password field to click login button
+        passwordField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(event.getKeyCode() == Input.Keys.ENTER){
+                    loginBtn.callOnClick();
+                }
+                return false;
+            }
+        });
 
         //Setup progress spinner for login
         loginSpinner = view.findViewById(R.id.loginProgressBar);
