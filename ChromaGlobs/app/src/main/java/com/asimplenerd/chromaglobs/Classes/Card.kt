@@ -7,6 +7,7 @@ import android.media.Image
 import android.media.ImageReader
 import android.os.Parcel
 import android.os.Parcelable
+import com.badlogic.gdx.utils.XmlReader
 import com.badlogic.gdx.utils.XmlWriter
 import java.io.File
 
@@ -43,6 +44,21 @@ class Card() : Parcelable{
 
     constructor (name: String, type: GlobType, health: Int, ap: Int, dp: Int, rarity: Rarity, cardId : Int) : this(name, type, health, ap, dp, rarity){
         this.cardId = cardId
+    }
+
+    constructor(fileName : String) : this() {
+        var reader = XmlReader();
+        var element = reader.parse(fileName)
+        this.name = element.getAttribute("name")
+        this.type = stringToGlobType(element.get("type"))
+        this.health = element.getInt("health")
+        this.attackPower = element.getInt("attack")
+        this.specialAttackPower = element.getInt("special")
+        this.defenseRating = element.getInt("defense")
+        this.mana = element.getInt("mana")
+        this.rarity = stringToRarity(element.get("rarity"))
+        this.level = element.getInt("level")
+        this.cardId = element.getInt("id")
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
@@ -195,6 +211,21 @@ class Card() : Parcelable{
 
     fun writeXmlTag(writer : XmlWriter, index : Int){
         writer.element("Card").attribute("name", getCardName()).attribute("index", index)
+                .element("type", getCardType()).element("health", getCardHealth()).element("attack", getAttackPower())
+                .element("special", getSpecialAttackPower()).element("defense", getDefenseRating()).element("mana", getAvailableMana())
+                .element("rarity", getRarity()).element("level", getCardLevel()).element("id", getCardId()).pop()
+    }
+
+    private fun stringToGlobType(s : String) : GlobType{
+       return GlobType.valueOf(s)
+    }
+
+    private fun stringToRarity(s : String) : Rarity{
+        return Rarity.valueOf(s)
+    }
+
+    fun writeXmlTag(writer: XmlWriter) {
+        writer.element("Card").attribute("name", getCardName())
                 .element("type", getCardType()).element("health", getCardHealth()).element("attack", getAttackPower())
                 .element("special", getSpecialAttackPower()).element("defense", getDefenseRating()).element("mana", getAvailableMana())
                 .element("rarity", getRarity()).element("level", getCardLevel()).element("id", getCardId()).pop()

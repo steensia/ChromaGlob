@@ -43,6 +43,8 @@ import java.util.Map;
 
 public class UpdateActivity extends AppCompatActivity {
 
+    private String remoteVersion = "0.0.0";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +79,10 @@ public class UpdateActivity extends AppCompatActivity {
             dirFolder.mkdir();
         }
 
+        File cardsFolder = new File(getApplicationContext().getFilesDir(), "cards/");
+        if(!cardsFolder.exists()){
+            cardsFolder.mkdir();
+        }
         checkForApplicationContentUpdate();
         launchMainActivity();
     }
@@ -93,8 +99,10 @@ public class UpdateActivity extends AppCompatActivity {
                     Log.d("ServerAppVersion", dataSnapshot.getValue().toString());
                     if(!localVersion.equals(dataSnapshot.getValue())){
                         Log.d("AppUpdate", "Application version mismatch. Updating to version " + dataSnapshot.getValue().toString());
+                        remoteVersion = dataSnapshot.getValue().toString();
                         Updater updater = new Updater();
                         updater.doInBackground(0);
+                        writeAppVersion();
                     }
                     else{
                         Log.d("AppUpdate", "Application is up to date. No update needed. Starting MainActivity");
@@ -115,18 +123,31 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private String getLocalAppVersion(){
-        FileInputStream fileIn;
         try {
-            fileIn = new FileInputStream(new File(getResources().getString(R.string.update_file)));
-            XmlReader xmlReader = new XmlReader();
-            String appName = xmlReader.parse(fileIn).getAttribute("appName");
-            String appVersion = xmlReader.parse(fileIn).getAttribute("appVersion");
+            File versionFile = new File(getApplicationContext().getFilesDir(), getResources().getString(R.string.update_file));
+            XmlReader reader = new XmlReader();
+            XmlReader.Element root = reader.parse(new FileInputStream(versionFile));
+            String appName = root.getAttribute("appName");
+            String appVersion = root.getAttribute("appVersion");
             if(!appName.equals(getResources().getString(R.string.app_name))){
                 return "-2.0"; //app mismatch? TODO
             }
             return appVersion;
-        }catch (FileNotFoundException e){
+        }catch (NullPointerException | FileNotFoundException e){
             return "-1.0"; //There is no version file, so this is the base installed app. update time.
+        }
+    }
+
+    private void writeAppVersion(){
+        try{
+            File versionFile = new File(getApplicationContext().getFilesDir(), getResources().getString(R.string.update_file));
+            if(!versionFile.exists())
+                versionFile.createNewFile();
+            XmlWriter writer = new XmlWriter(new FileWriter(versionFile));
+            writer.element("App").attribute("appName", getResources().getString(R.string.app_name)).attribute("appVersion", remoteVersion).pop();
+            writer.close();
+        }catch(IOException e){
+            Log.w("WriteUpdateVersion", "Failed to write app update version to file: " + e.getLocalizedMessage());
         }
     }
 
@@ -268,6 +289,7 @@ public class UpdateActivity extends AppCompatActivity {
             Log.d("CardCreation", "Card created: " + c.getCardName() + " with id: " + c.getId());
             //Download the image associated with the card
             downloadCardImage(map.get("imgSrc").toString() + ".png");
+            writeCardFile(c);
             return c;
         }
 
@@ -341,6 +363,15 @@ public class UpdateActivity extends AppCompatActivity {
             }
             //Fetch the image file
             storage.getReference(getResources().getString(R.string.card_image_url) + imageLoc).getFile(image);
+        }
+
+        private void writeCardFile(Card c){
+            try {
+                XmlWriter writer = new XmlWriter(new FileWriter(getApplicationContext().getFilesDir() + "/cards/" + c.getCardName() + ".xml"));
+                c.writeXmlTag(writer); //write without specifying index of card since this is not a deck!
+            } catch (IOException e) {
+                Log.e("UpdateWriteCard", "Failed to write card info: " + e.getLocalizedMessage());
+            }
         }
     }
 
