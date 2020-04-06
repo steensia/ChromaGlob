@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.asimplenerd.chromaglobs.MainActivity
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -124,8 +125,8 @@ fun readMissionDesc(missionId : Int, daily: Daily) {
     var dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             if(p0.exists()){
-                var h = p0.getValue() as HashMap<String, Object>
-                missionDesc = h.get("Description") as String
+                var h = p0.getValue() as HashMap<*, *>
+                missionDesc = h["Description"] as String
                 daily.setDescription(missionDesc)
                 Log.d("missionDesc", missionDesc)
             }
@@ -158,33 +159,39 @@ fun updatePlayersMissions(player: Player) {
     var dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             if(p0.exists()){
+                Log.d("MissionCreation", "Previous missions detected.")
                 db.getReference("Users").child(player.id).child("LastLogin").addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onDataChange(p0: DataSnapshot) {
                         if(p0.exists()) {
-                            var currentDate = Calendar.getInstance().time
-                            var t = object : GenericTypeIndicator<Date>(){}
-                            var oldDate = p0.getValue(t)
-                            if(currentDate.month != oldDate!!.month || currentDate.date != oldDate!!.date || currentDate.year != oldDate!!.year)
-                            {
-                                makeNewMissions(player)
-                            }
-                            else {
-                                Log.d("hey fam", "repoopulate missions!!")
-                                db.getReference("Users").child(player.id).child("Missions").addListenerForSingleValueEvent(object : ValueEventListener {
-                                    override fun onCancelled(p0: DatabaseError) {
-                                    }
-
-                                    override fun onDataChange(p0: DataSnapshot) {
-                                        if(p0.exists()) {
-                                            var missionIds = p0.getValue() as ArrayList<Long>
-                                            player.setMissions(missionIds[0].toInt(), missionIds[1].toInt(), missionIds[2].toInt())
+                            var dateFormatter = SimpleDateFormat("yyyyMMdd", Locale.US)
+                            var currentDate = dateFormatter.format(System.currentTimeMillis())
+                            if (!p0.hasChild("time")) {
+                                makeNewMissions(player);
+                            } else {
+                                var oldDate = dateFormatter.format(p0.child("time").value)
+                                Log.d("UserLogin", "User last logged in on: $oldDate")
+                                if (oldDate < currentDate) {
+                                    Log.d("MissionCreation", "New day since last login. Player is getting new misisons.")
+                                    makeNewMissions(player);
+                                    updatePlayerLogin(player)
+                                } else {
+                                    Log.d("MissionCreation", "Date: $oldDate is the same as: $currentDate")
+                                    db.getReference("Users").child(player.id).child("Missions").addListenerForSingleValueEvent(object : ValueEventListener {
+                                        override fun onCancelled(p0: DatabaseError) {
                                         }
-                                    }
-                                })
-                                //repopulateMissions(player)
+
+                                        override fun onDataChange(p0: DataSnapshot) {
+                                            if (p0.exists()) {
+                                                var missionIds = p0.getValue() as ArrayList<Long>
+                                                player.setPlayerMissions(missionIds[0].toInt(), missionIds[1].toInt(), missionIds[2].toInt())
+                                            }
+                                        }
+                                    })
+                                }
                             }
                         }
                         else {
+                            Log.d("MissionCreation", "Could not find last login field.")
                             updatePlayerLogin(player)
                             makeNewMissions(player)
                         }
@@ -220,7 +227,7 @@ private fun makeNewMissions(player: Player) {
     stuff.put("2", id3)
 
     FirebaseDatabase.getInstance().getReference("Users").child(player.id).child("Missions").updateChildren(stuff)
-    player.setMissions(id1, id2, id3)
+    player.setPlayerMissions(id1, id2, id3)
 }
 
 private fun repopulateMissions(player: Player, context : Context) {

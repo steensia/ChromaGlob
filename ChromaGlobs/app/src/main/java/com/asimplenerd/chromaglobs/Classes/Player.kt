@@ -7,7 +7,7 @@ class Player(){
     lateinit var username : String
     lateinit var id : String
     var OwnedCards = ArrayList<Card>()
-    var missions = arrayOf(-1, -1, -1)
+    var missions = ArrayList<Int>(3)
     var nextMissionID = 0
 
     constructor(Name : String, id : String, vararg OwnedCards : ArrayList<Card>) : this(){
@@ -28,7 +28,12 @@ class Player(){
         return missions[id]
     }
 
-    fun setMissions(vararg m : Int) {
+    fun setPlayerMissions(vararg m : Int) {
+        if(missions.size == 0){
+            missions.add(-1)
+            missions.add(-1)
+            missions.add(-1)
+        }
         missions[0] = m[0]
         missions[1] = m[1]
         missions[2] = m[2]

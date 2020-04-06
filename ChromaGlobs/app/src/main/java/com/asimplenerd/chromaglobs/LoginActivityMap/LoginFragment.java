@@ -128,7 +128,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         passwordField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(event.getKeyCode() == Input.Keys.ENTER){
+                if(event != null && event.getKeyCode() == Input.Keys.ENTER){
                     loginBtn.callOnClick();
                 }
                 return false;

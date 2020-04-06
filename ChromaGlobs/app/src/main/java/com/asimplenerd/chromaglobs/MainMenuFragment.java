@@ -120,8 +120,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     public void onStart(){
         super.onStart();
         getUserInfo();
-        updateUserLogin();
-
         DatabaseManagerKt.updatePlayersMissions(((MainActivity) getActivity()).user);
     }
 
@@ -199,7 +197,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null && !promptShown) {
+                if ((dataSnapshot.getValue() == null || dataSnapshot.getValue() == "") && !promptShown) {
                     Log.d("UserInfo", "No user");
                     promptShown = true;
                     //user is brand new. Create its data
@@ -213,7 +211,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 }
                 else{
                     Log.d("DBMod", "User already setup on UID");
-                    //((MainActivity) getActivity()).user.username = dataSnapshot.getValue().toString();
                     Log.d("DBMod", "Username was: " + dataSnapshot.getValue().toString());
                 }
             }
