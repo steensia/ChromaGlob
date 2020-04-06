@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/collection_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CollectionActivityMap.CollectionFragment">
+    tools:context=".CollectionActivityMap.DeckActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frame_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/collectionLabel"
+            android:id="@+id/deckLabel"
             android:layout_width="152dp"
             android:layout_height="39dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:text="@string/collection_label"
+            android:text="@string/deck_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             app:layout_constraintEnd_toStartOf="@+id/deckList"
             app:layout_constraintHorizontal_bias="0.007"
@@ -33,7 +33,7 @@
             app:layout_constraintBottom_toTopOf="@+id/cardView"
             app:layout_constraintEnd_toStartOf="@+id/deckList"
             app:layout_constraintHorizontal_bias="0.071"
-            app:layout_constraintStart_toEndOf="@+id/collectionLabel"
+            app:layout_constraintStart_toEndOf="@+id/deckLabel"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.727" />
 
@@ -61,9 +61,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/deckList"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/collectionLabel">
+            app:layout_constraintTop_toBottomOf="@+id/deckLabel">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/card_displays"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -76,6 +77,10 @@
                     app:layout_constraintStart_toEndOf="@+id/cardSeven"
                     app:layout_constraintTop_toBottomOf="@+id/cardFour">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card8"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -87,6 +92,10 @@
                     app:layout_constraintStart_toEndOf="@+id/cardSix"
                     app:layout_constraintTop_toBottomOf="@+id/cardThree">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card7"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -98,6 +107,10 @@
                     app:layout_constraintStart_toEndOf="@+id/cardFive"
                     app:layout_constraintTop_toBottomOf="@+id/cardTwo">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -110,6 +123,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/cardOne"
                     app:layout_constraintVertical_bias="0.456">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -121,6 +138,10 @@
                     app:layout_constraintStart_toEndOf="@+id/cardThree"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -132,6 +153,10 @@
                     app:layout_constraintStart_toEndOf="@+id/cardTwo"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -143,6 +168,10 @@
                     app:layout_constraintStart_toEndOf="@+id/cardOne"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -154,6 +183,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <com.asimplenerd.chromaglobs.Classes.CardRenderer
+                        android:id="@+id/card1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
@@ -174,112 +207,131 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/decksLabel"
-                    android:layout_width="64dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/deckNumLabel"
+                    android:layout_width="74dp"
+                    android:layout_height="33dp"
                     android:layout_marginTop="16dp"
-                    android:text="@string/decks_label"
+                    android:text="@string/deck_num_label"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <FrameLayout
-                    android:id="@+id/deckOne"
+                    android:id="@+id/cardOneDeck"
                     android:layout_width="64dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/decksLabel">
+                    app:layout_constraintTop_toBottomOf="@+id/deckNumLabel">
 
                     <TextView
-                        android:id="@+id/deckOneText"
+                        android:id="@+id/cardOneDeckText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/deck_one_label" />
+                        android:text="@string/card_one_label" />
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/deckTwo"
+                    android:id="@+id/cardTwoDeck"
                     android:layout_width="64dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.486"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/deckOne">
+                    app:layout_constraintTop_toBottomOf="@+id/cardOneDeck">
 
                     <TextView
-                        android:id="@+id/deckTwoText"
+                        android:id="@+id/cardTwoDeckText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/deck_two_label" />
+                        android:text="@string/card_two_label" />
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/deckThree"
+                    android:id="@+id/cardThreeDeck"
                     android:layout_width="64dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.486"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/deckTwo">
+                    app:layout_constraintTop_toBottomOf="@+id/cardTwoDeck">
 
                     <TextView
-                        android:id="@+id/deckThreeText"
+                        android:id="@+id/cardThreeDeckText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/deck_three_label" />
+                        android:text="@string/card_three_label" />
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/deckFour"
+                    android:id="@+id/cardFourDeck"
                     android:layout_width="64dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/deckThree">
+                    app:layout_constraintTop_toBottomOf="@+id/cardThreeDeck">
 
                     <TextView
-                        android:id="@+id/deckFourText"
+                        android:id="@+id/cardFourDeckText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/deck_four_label" />
+                        android:text="@string/card_four_label" />
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/deckFive"
+                    android:id="@+id/cardFiveDeck"
                     android:layout_width="64dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/deckFour">
+                    app:layout_constraintTop_toBottomOf="@+id/cardFourDeck">
 
                     <TextView
-                        android:id="@+id/deckFiveText"
+                        android:id="@+id/cardFiveDeckText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/deck_five_label" />
+                        android:text="@string/card_five_label" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/cardCount"
+                    android:layout_width="64dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintBottom_toTopOf="@+id/button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardFiveDeck">
+
+                    <TextView
+                        android:id="@+id/cardCountText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/card_count_label" />
                 </FrameLayout>
 
                 <Button
                     android:id="@+id/button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/create_deck_label"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/complete_deck_label"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.511"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/deckFive"
-                    app:layout_constraintVertical_bias="0.515" />
+                    app:layout_constraintTop_toBottomOf="@+id/cardFiveDeck"
+                    app:layout_constraintVertical_bias="0.974" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
