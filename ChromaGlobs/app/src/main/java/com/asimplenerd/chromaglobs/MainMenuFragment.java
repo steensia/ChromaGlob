@@ -16,6 +16,7 @@ import com.asimplenerd.chromaglobs.Classes.Card;
 import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.Player;
 import com.asimplenerd.chromaglobs.SettingsActivityMap.SettingsFragment;
+import com.asimplenerd.chromaglobs.ShopActivityMap.ShopFragment;
 import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,7 +39,7 @@ import java.util.Map;
  * Use the {@link MainMenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainMenuFragment extends Fragment implements View.OnClickListener{
+public class MainMenuFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -117,17 +118,17 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         getUserInfo();
         DatabaseManagerKt.updatePlayersMissions(((MainActivity) getActivity()).user);
     }
 
     @Override
-    public void onClick(View v){
-        switch(v.getId()){
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.playButton:
-                ((MainActivity)getActivity()).launchGameActivity();
+                ((MainActivity) getActivity()).launchGameActivity();
                 break;
             case R.id.tradeButton:
                 // Move to the trade fragment, and prepare for a trade
@@ -142,6 +143,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.collectionButton:
                 setupCollection();
+            case R.id.shopButton:
+                setupShop();
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -163,8 +166,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         void onFragmentInteraction(Uri uri);
     }
 
-    private void setupTrade(){
-        MainActivity mainActivity = (MainActivity)getActivity();
+    private void setupTrade() {
+        MainActivity mainActivity = (MainActivity) getActivity();
         TradeSetupFragment tradeFrag = new TradeSetupFragment();
         Bundle ownedCardBundle = new Bundle();
         ownedCardBundle.putParcelableArrayList("ownedCards", mainActivity.getOwnedCards());
@@ -180,6 +183,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
         ((MainActivity) getActivity()).swapToNewFragment(new Missions(), true);
     }
 
+    private void setupShop() {
+        ((MainActivity) getActivity()).swapToNewFragment(new ShopFragment(), true);
+    }
+
     private void setupCollection() {
         ((MainActivity) getActivity()).startCollectionsActivity();
     }
@@ -192,7 +199,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
             return;
         }
         db.getReference().child("Users").child(user.getUid()).child("username").addListenerForSingleValueEvent(new ValueEventListener() {
-        final MainActivity mainActivity = (MainActivity)getActivity();
+            final MainActivity mainActivity = (MainActivity) getActivity();
             private boolean promptShown = false;
 
             @Override
@@ -208,8 +215,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener{
                     playerList.put(user.getUid(), p);
                     info.updateChildren(playerList);
                     Log.d("DBMod", "Added UID Field to Users db");
-                }
-                else{
+                } else {
                     Log.d("DBMod", "User already setup on UID");
                     Log.d("DBMod", "Username was: " + dataSnapshot.getValue().toString());
                 }

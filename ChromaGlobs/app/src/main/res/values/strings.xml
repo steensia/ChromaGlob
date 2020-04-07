@@ -32,4 +32,7 @@
     <string name="card_five_label">Card 5</string>
     <string name="card_count_label">0/20</string>
     <string name="complete_deck_label">Complete</string>
+    <string name="shop_label">Shop</string>
+    <string name="shop_prompt">Buy Cards and Packs!</string>
+    <string name="currency_label">Blob$:</string>
 </resources>
