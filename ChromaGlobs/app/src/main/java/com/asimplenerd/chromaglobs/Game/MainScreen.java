@@ -127,7 +127,7 @@ public class MainScreen implements Screen {
         //TODO place logic for forfeiting a match here
         try {
             Log.d("Forfeit", "Player has forfeited the match! Returning to main activity!");
-            parent.quit();
+            Gdx.app.exit();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -177,5 +177,8 @@ public class MainScreen implements Screen {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        board.dispose();
+        player.dispose();
+        opponent.dispose();
     }
 }
