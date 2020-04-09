@@ -143,8 +143,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.collectionButton:
                 setupCollection();
+                break;
             case R.id.shopButton:
                 setupShop();
+                break;
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
