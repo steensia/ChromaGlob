@@ -1,8 +1,12 @@
 package com.asimplenerd.chromaglobs.Classes
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import com.asimplenerd.chromaglobs.MainActivity
+import com.asimplenerd.chromaglobs.R
 import com.badlogic.gdx.utils.XmlReader
 import com.badlogic.gdx.utils.XmlWriter
 import com.google.firebase.database.DataSnapshot
@@ -223,8 +227,50 @@ fun updatePlayersMissions(player: Player) {
     db.getReference("Users").child(player.id).child("Missions").addListenerForSingleValueEvent(dataListener)
 }
 
-fun checkMissionCompletionStatus(player: Player, goal : Daily){
+fun setMissionGoal(player: Player, daily : Daily){
+    val db = FirebaseDatabase.getInstance()
+    val missionId = daily.getMissionId()
+    Log.d("MissionCompletion", "beginning to check for user mission goal requirements.")
+    val dataListener = object : ValueEventListener{
+        override fun onCancelled(p0: DatabaseError) {
+            //TODO what do we want if the data for a goal cannot be read?
+        }
 
+        override fun onDataChange(p0: DataSnapshot) {
+            if(p0.exists()){
+                val currentValue = p0.value as Long
+                Log.d("MissionCompletion", "value of goal currently is $currentValue")
+                daily.setMissionGoal(currentValue.toInt() + 1)
+            }
+            else{
+                Log.d("MissionCompletion", "player has never done the requisite action. Setting mission goal to one...")
+                daily.setMissionGoal(1); //The player has never done this action. Assume a value of zero.
+            }
+        }
+
+    }
+    db.getReference("Users").child(player.id).child("Stats").child(getMissionFieldName(missionId)).addListenerForSingleValueEvent(dataListener)
+}
+
+fun checkMissionCompletion(player : Player, daily : Daily, status : TextView, button : Button){
+    val db = FirebaseDatabase.getInstance()
+    val dataListener = object : ValueEventListener{
+        override fun onCancelled(p0: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onDataChange(p0: DataSnapshot) {
+            if(p0.exists()){
+                val currentValue = p0.value as Long
+                daily.setComplete(currentValue >= daily.getMissionGoal())
+            }
+            button.isEnabled = daily.getComplete() && !daily.getClaimed()
+            status.text = (if (daily.getComplete()) "Complete" else "Incomplete")
+            status.setTextColor(if (daily.getComplete()) Color.GREEN else Color.RED)
+        }
+
+    }
+    db.getReference("Users").child(player.id).child("Stats").child(getMissionFieldName(daily.getMissionId())).addListenerForSingleValueEvent(dataListener)
 }
 
 private fun makeNewMissions(player: Player) {
@@ -249,14 +295,14 @@ private fun makeNewMissions(player: Player) {
 
 private fun revertMission(id : Int) {
     var myFile = File(context.filesDir, "/missions/${id.toString()}.xml")
-
+    Log.d("MissionRevert", "Reverting previous missions to default value")
     if(myFile.exists()) {
         var reader = XmlReader()
         var missionFile = reader.parse(FileInputStream(myFile))
         var desc = missionFile.get("Description")
 
         var writer = XmlWriter(FileWriter(myFile))
-        writer.element("Mission").element("Description", desc).element("RewardType", "none").pop()
+        writer.element("Mission").element("Description", desc).element("RewardType", "none").element("Complete", "false").element("Claimed", "false").element("Goal").pop()
         writer.close()
     }
     else {
@@ -269,3 +315,17 @@ private fun repopulateMissions(player: Player, context : Context) {
         player.nextMissionID
     }
 }
+
+private fun getMissionFieldName(id : Int) : String{
+    when(id){
+        0 -> return "TotalTrades"
+        1 -> return "MatchesPlayed"
+        2 -> return "CardsBought"
+        3 -> return "FriendsAdded"
+        4 -> return "DecksCreated"
+        5 -> return "Level"
+        6 -> return "MatchesWon"
+    }
+    return ""
+}
+

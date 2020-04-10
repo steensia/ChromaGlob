@@ -35,4 +35,5 @@
     <string name="shop_label">Shop</string>
     <string name="shop_prompt">Buy Cards and Packs!</string>
     <string name="currency_label">Blob$:</string>
+    <string name="reward_claimed">Reward claimed!</string>
 </resources>

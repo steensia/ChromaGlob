@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.asimplenerd.chromaglobs.Classes.Daily;
@@ -90,6 +91,7 @@ public class Dailies extends Fragment implements View.OnClickListener {
         super.onStart();
 
         setupDaily();
+        checkDailyStatus();
     }
 
     @Override
@@ -97,12 +99,14 @@ public class Dailies extends Fragment implements View.OnClickListener {
         if(v.getId() == R.id.rewardButton){
             Log.d("ClaimingReward", "User has started claiming a reward");
             daily.claimReward(((MainActivity)getActivity()).user);
+            v.setEnabled(false);
+            ((Button)v).setText(R.string.reward_claimed);
         }
     }
 
     private void setupDaily() {
+        getView().findViewById(R.id.rewardButton).setEnabled(false);
         DatabaseManagerKt.updatePlayersMissions(((MainActivity)getActivity()).user);
-
         TextView status = getView().findViewById(R.id.missionStatus);
         TextView desc = getView().findViewById(R.id.missionDesc);
         TextView type = getView().findViewById(R.id.missionType);
@@ -117,6 +121,15 @@ public class Dailies extends Fragment implements View.OnClickListener {
 
         //Have daily commit to file
         daily.updateXmlFile();
+
+        //Check if a goal already exists for the mission
+        if(!daily.getGoalsProvided()){
+            DatabaseManagerKt.setMissionGoal(((MainActivity) getActivity()).user, daily);
+        }
+        else{
+            Log.d("MissionCreation", "goals existed for mission");
+        }
+
     }
 
     public void updateDescription() {
@@ -125,11 +138,11 @@ public class Dailies extends Fragment implements View.OnClickListener {
     }
 
     private void checkDailyStatus(){
-        if(!daily.getComplete()){
-            DatabaseManagerKt.checkMissionCompletionStatus(((MainActivity) getActivity()).user, daily);
-
+        Button button = (Button)getView().findViewById(R.id.rewardButton);
+        DatabaseManagerKt.checkMissionCompletion(((MainActivity) getActivity()).user, daily, (TextView) getView().findViewById(R.id.missionStatus), button);
+        if(daily.getClaimed()){
+            button.setEnabled(false);
+            button.setText(R.string.reward_claimed);
         }
-        //Enable the button if a daily is not claimed and is complete.
-        getView().findViewById(R.id.rewardButton).setEnabled(daily.getComplete() && (!daily.getClaimed()));
     }
 }

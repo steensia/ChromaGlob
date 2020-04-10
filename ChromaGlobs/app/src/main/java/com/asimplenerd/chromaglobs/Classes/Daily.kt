@@ -20,6 +20,9 @@ class Daily() {
     private lateinit var descriptionField : TextView
     private lateinit var dailyFrag : Dailies
     private  var missionGoal : Int = 0
+
+    var goalsProvided = false
+
     // TODO: add a date to missions, so we know when to give new ones.
     // OR just load a new mission once they've claimed the reward for the completed mission?
 
@@ -49,17 +52,18 @@ class Daily() {
             this.description = desc
             val rewardType = theWholeFile.get("RewardType", "none")
             val completed = theWholeFile.get("Complete", "false")
-            val rewardClaimed = theWholeFile.get("Claimed", "no")
+            val rewardClaimed = theWholeFile.get("Claimed", "false")
             this.missionType = missionType
             this.complete = completed == "true"
             this.claimed = rewardClaimed == "true"
-            val goal = theWholeFile.get("Goal", "no goal")
+            val goal = theWholeFile.get("Goal", "")
             if(rewardType != "none") {
                 Log.d("reward type", "this mission has no reward!")
                 this.missionType = MissionType.valueOf(rewardType)
             }
-            if(goal != "no goal"){
+            if(goal != ""){
                 this.missionGoal = goal.toInt()
+                goalsProvided = true
             }
         }
         else{
@@ -96,6 +100,10 @@ class Daily() {
 
     }
 
+    fun getMissionId() : Int{
+        return missionId
+    }
+
     fun getClaimed() : Boolean{
         return claimed
     }
@@ -106,7 +114,7 @@ class Daily() {
             MissionType.Gold -> addGoldToPlayer(player, calculateGoldReward())
         }
         claimed = true
-        updateXmlTag("Claimed", "yes")
+        updateXmlTag("Claimed", "true")
     }
 
     fun setMissionType(type : MissionType){
@@ -129,6 +137,16 @@ class Daily() {
         Log.d("GoldReward", "Claiming gold reward for user")
         //TODO create a formula to update gold count
         return 10
+    }
+
+    fun setMissionGoal(goal : Int){
+        Log.d("MissionCompletion", "Updating mission goal from $missionGoal to $goal")
+        missionGoal = goal
+        updateXmlTag("Goal", missionGoal.toString())
+    }
+
+    fun getMissionGoal() : Int{
+        return missionGoal
     }
 
     fun getMissionCompletionCondition() : Int{
