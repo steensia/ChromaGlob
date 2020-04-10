@@ -57,7 +57,7 @@ fun addCardToPlayer(player : Player, card : Card){
             TODO("Not yet implemented")
         }
     }
-//    db.getReference("Users").child(player.id).child("OwnedCards")
+    db.getReference("Users").child(player.id).child("OwnedCards").child(card.getId().toString()).addListenerForSingleValueEvent(dataListener)
 }
 
 fun readPlayerGold(player : Player){

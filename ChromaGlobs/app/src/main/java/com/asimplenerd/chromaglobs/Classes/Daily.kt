@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.XmlWriter
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileWriter
+import kotlin.random.Random
 
 class Daily() {
 
@@ -129,8 +130,11 @@ class Daily() {
     }
 
     fun selectCardReward() : Card{
-        Log.d("CardReward", "Claiming card reward for user")
-        return Card("Test card 2", GlobType.Air, 10, 10, 9, Rarity.Common, 1)
+        //Generate a random id to give as a reward based on total cards in game
+        val cardDir = File(context.filesDir, "cards/")
+        val cardId = Random.nextInt(0, cardDir.listFiles()!!.size)
+        Log.d("CardReward", "Claiming card reward (card id $cardId) for user")
+        return Card("Test card 2", GlobType.Air, 10, 10, 9, Rarity.Common, cardId)
     }
 
     private fun calculateGoldReward() : Int{
