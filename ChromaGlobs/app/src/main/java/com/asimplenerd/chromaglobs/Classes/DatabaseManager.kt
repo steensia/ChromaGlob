@@ -294,8 +294,9 @@ private fun makeNewMissions(player: Player) {
 }
 
 private fun revertMission(id : Int) {
-    var myFile = File(context.filesDir, "/missions/${id.toString()}.xml")
-    Log.d("MissionRevert", "Reverting previous missions to default value")
+    //FIXME
+    var myFile = File(context.filesDir, "missions/${id.toString()}.xml")
+    Log.d("MissionRevert", "Reverting previous missions ($id) to default value")
     if(myFile.exists()) {
         var reader = XmlReader()
         var missionFile = reader.parse(FileInputStream(myFile))
