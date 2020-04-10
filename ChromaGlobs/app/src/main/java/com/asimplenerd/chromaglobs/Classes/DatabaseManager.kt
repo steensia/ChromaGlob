@@ -38,7 +38,7 @@ fun initialize(main : MainActivity){
 
 fun addCardToPlayer(player : Player, card : Card){
     val db = FirebaseDatabase.getInstance()
-    var dataListener = object : ValueEventListener{
+    val dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             var cardCount = 0L
             if(p0.exists()){
@@ -57,7 +57,7 @@ fun addCardToPlayer(player : Player, card : Card){
             TODO("Not yet implemented")
         }
     }
-
+//    db.getReference("Users").child(player.id).child("OwnedCards")
 }
 
 fun readPlayerGold(player : Player){
@@ -70,7 +70,7 @@ fun readPlayerGold(player : Player){
             if(p0.exists()){
                 currentGold = p0.value as Long
             }
-            Log.d("PlayerGold", "Player has: " + currentGold + " gold")
+            Log.d("PlayerGold", "Player has: $currentGold  gold")
             playerGold = currentGold
         }
 
@@ -84,7 +84,7 @@ fun readPlayerGold(player : Player, amount : Int){
     val db = FirebaseDatabase.getInstance()
     var goldAmount = -1
     upToDate = false
-    var dataListener = object : ValueEventListener{
+    val dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             var currentGold = -1L
             if(p0.exists()){
@@ -115,8 +115,7 @@ fun addGoldToPlayer(player : Player, amount : Int){
 }
 
 fun getUsername(uid : String){
-    var uname = ""
-    var dataListener = object : ValueEventListener{
+    val dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             if(p0.exists()) {
                 playerName = p0.value as String
@@ -136,10 +135,10 @@ fun getPlayerGold(player : Player){
 }
 
 fun readMissionDesc(missionId : Int, daily: Daily) {
-    var dataListener = object : ValueEventListener{
+    val dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             if(p0.exists()){
-                var h = p0.getValue() as HashMap<*, *>
+                val h = p0.value as HashMap<*, *>
                 missionDesc = h["Description"] as String
                 daily.setDescription(missionDesc)
                 Log.d("missionDesc", missionDesc)
@@ -163,30 +162,30 @@ fun getMissionDesc(missionId : Int, daily : Daily){
 
 fun updatePlayerLogin(player: Player) {
 
-    var date = Calendar.getInstance().time
-    var db = FirebaseDatabase.getInstance()
+    val date = Calendar.getInstance().time
+    val db = FirebaseDatabase.getInstance()
     db.getReference("Users").child(player.id).child("LastLogin").setValue(date)
 }
 
 fun updatePlayersMissions(player: Player) {
-    var db = FirebaseDatabase.getInstance()
-    var dataListener = object : ValueEventListener{
+    val db = FirebaseDatabase.getInstance()
+    val dataListener = object : ValueEventListener{
         override fun onDataChange(p0: DataSnapshot) {
             if(p0.exists()){
                 Log.d("MissionCreation", "Previous missions detected.")
                 db.getReference("Users").child(player.id).child("LastLogin").addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onDataChange(p0: DataSnapshot) {
                         if(p0.exists()) {
-                            var dateFormatter = SimpleDateFormat("yyyyMMdd", Locale.US)
-                            var currentDate = dateFormatter.format(System.currentTimeMillis())
+                            val dateFormatter = SimpleDateFormat("yyyyMMdd", Locale.US)
+                            val currentDate = dateFormatter.format(System.currentTimeMillis())
                             if (!p0.hasChild("time")) {
-                                makeNewMissions(player);
+                                makeNewMissions(player)
                             } else {
-                                var oldDate = dateFormatter.format(p0.child("time").value)
+                                val oldDate = dateFormatter.format(p0.child("time").value)
                                 Log.d("UserLogin", "User last logged in on: $oldDate")
                                 if (oldDate < currentDate) {
                                     Log.d("MissionCreation", "New day since last login. Player is getting new misisons.")
-                                    makeNewMissions(player);
+                                    makeNewMissions(player)
                                     updatePlayerLogin(player)
                                 } else {
                                     Log.d("MissionCreation", "Date: $oldDate is the same as: $currentDate")
@@ -196,7 +195,7 @@ fun updatePlayersMissions(player: Player) {
 
                                         override fun onDataChange(p0: DataSnapshot) {
                                             if (p0.exists()) {
-                                                var missionIds = p0.getValue() as ArrayList<Long>
+                                                val missionIds = p0.getValue() as ArrayList<Long>
                                                 player.setPlayerMissions(missionIds[0].toInt(), missionIds[1].toInt(), missionIds[2].toInt())
                                             }
                                         }
@@ -244,7 +243,7 @@ fun setMissionGoal(player: Player, daily : Daily){
             }
             else{
                 Log.d("MissionCompletion", "player has never done the requisite action. Setting mission goal to one...")
-                daily.setMissionGoal(1); //The player has never done this action. Assume a value of zero.
+                daily.setMissionGoal(1) //The player has never done this action. Assume a value of zero.
             }
         }
 
@@ -274,15 +273,15 @@ fun checkMissionCompletion(player : Player, daily : Daily, status : TextView, bu
 }
 
 private fun makeNewMissions(player: Player) {
-    var stuff = HashMap<String, Any>()
+    val stuff = HashMap<String, Any>()
 
     // no missions exist, create some
     val rand = Random()
-    var id1 = rand.nextInt(7)
+    val id1 = rand.nextInt(7)
     stuff.put("0", id1)
-    var id2 = rand.nextInt(7)
+    val id2 = rand.nextInt(7)
     stuff.put("1", id2)
-    var id3 = rand.nextInt(7)
+    val id3 = rand.nextInt(7)
     stuff.put("2", id3)
 
     revertMission(player.nextMissionID)
@@ -294,26 +293,19 @@ private fun makeNewMissions(player: Player) {
 }
 
 private fun revertMission(id : Int) {
-    //FIXME
-    var myFile = File(context.filesDir, "missions/${id.toString()}.xml")
+    val myFile = File(context.filesDir, "missions/${id.toString()}.xml")
     Log.d("MissionRevert", "Reverting previous missions ($id) to default value")
     if(myFile.exists()) {
-        var reader = XmlReader()
-        var missionFile = reader.parse(FileInputStream(myFile))
-        var desc = missionFile.get("Description")
+        val reader = XmlReader()
+        val missionFile = reader.parse(FileInputStream(myFile))
+        val desc = missionFile.get("Description")
 
-        var writer = XmlWriter(FileWriter(myFile))
+        val writer = XmlWriter(FileWriter(myFile))
         writer.element("Mission").element("Description", desc).element("RewardType", "none").element("Complete", "false").element("Claimed", "false").element("Goal").pop()
         writer.close()
     }
     else {
         Log.d("mission rewards", "no file!!!!!")
-    }
-}
-
-private fun repopulateMissions(player: Player, context : Context) {
-    if(context != null){
-        player.nextMissionID
     }
 }
 
