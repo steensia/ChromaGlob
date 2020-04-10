@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Xml;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -297,12 +298,14 @@ public class UpdateActivity extends AppCompatActivity {
             String desc = map.get("Description").toString();
             Daily d = new Daily(false, desc, false);
             try {
-                File myFile = new File(getBaseContext().getFilesDir() + "/missions/",id +".txt");
-                myFile.createNewFile();
-                FileOutputStream writer = new FileOutputStream(myFile);
-                writer.write(desc.getBytes());
-                writer.flush();
-                writer.close();
+                File myFile = new File(getBaseContext().getFilesDir() + "/missions/",id +".xml");
+                if(!myFile.exists()) {
+                    Log.d("Missions xml", "creating xml file");
+                    myFile.createNewFile();
+                    XmlWriter writer = new XmlWriter(new FileWriter(myFile));
+                    writer.element("Mission").element("Description", desc).pop();
+                    writer.close();
+                }
             }
             catch (IOException e) {
                 e.printStackTrace();

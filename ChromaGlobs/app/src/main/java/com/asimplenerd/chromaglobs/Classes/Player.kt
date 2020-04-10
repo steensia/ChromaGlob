@@ -1,7 +1,7 @@
 package com.asimplenerd.chromaglobs.Classes
 
 import android.util.Log
-import com.asimplenerd.chromaglobs.Missions
+import java.io.File
 
 class Player(){
     lateinit var username : String
@@ -37,7 +37,5 @@ class Player(){
         missions[0] = m[0]
         missions[1] = m[1]
         missions[2] = m[2]
-
     }
-
 }

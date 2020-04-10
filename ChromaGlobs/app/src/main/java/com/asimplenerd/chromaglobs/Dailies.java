@@ -15,6 +15,8 @@ import com.asimplenerd.chromaglobs.Classes.Daily;
 import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.MissionType;
 
+import java.util.Random;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,7 +75,12 @@ public class Dailies extends Fragment implements View.OnClickListener {
         //Create daily for this display if one does not exist.
         int id = ((MainActivity) getActivity()).user.nextMissionID();
         Log.d("mission id", id+" ");
-        daily = new Daily(false, "desc", false, MissionType.Gold, id, (TextView) v.findViewById(R.id.missionDesc));
+
+        Random rand = new Random();
+        if(rand.nextBoolean())
+            daily = new Daily(false, "desc", false, MissionType.Gold, id, (TextView) v.findViewById(R.id.missionDesc));
+        else
+            daily = new Daily(false, "desc", false, MissionType.Card, id, (TextView) v.findViewById(R.id.missionDesc));
 
         return v;
     }

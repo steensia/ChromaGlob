@@ -3,8 +3,11 @@ package com.asimplenerd.chromaglobs.Classes
 import android.util.Log
 import android.widget.TextView
 import com.asimplenerd.chromaglobs.Dailies
+import com.badlogic.gdx.utils.XmlReader
+import com.badlogic.gdx.utils.XmlWriter
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileWriter
 
 class Daily() {
 
@@ -34,18 +37,28 @@ class Daily() {
 
     constructor(complete: Boolean, description: String, claimed: Boolean, missionType: MissionType, missionId : Int, d : TextView) : this(complete, description, claimed, missionType, missionId){
         this.descriptionField = d
-        var f = File(d.context.applicationContext.filesDir, "missions/$missionId.txt")
-        Log.d("file search", f.absolutePath);
+        var f = File(d.context.applicationContext.filesDir, "missions/$missionId.xml")
         if(f.exists())
         {
-            var fileIn = FileInputStream(f)
-            var desc = fileIn.bufferedReader().readLine()
+            var fileIn = XmlReader()
+            var theWholeFile = fileIn.parse(FileInputStream(f))
+            var desc = theWholeFile.get("Description")
             Log.d("mission desc", desc)
             this.description = desc
-            fileIn.close()
+            var rewardType = theWholeFile.get("RewardType", "none")
+            if(rewardType == "none") {
+                Log.d("reward type", "this mission has no reward!")
+                f.createNewFile()
+                val writer = XmlWriter(FileWriter(f))
+                writer.element("Mission").element("Description", desc).element("RewardType", missionType).pop()
+                writer.close()
+            }
+            else {
+                this.missionType = MissionType.valueOf(rewardType)
+            }
         }
-        else {
-            Log.d("mission desc", "no file found")
+        else{
+            Log.d("mission desc", "${d.context.applicationContext.filesDir}/missions/$missionId.xml")
         }
     }
 

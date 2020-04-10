@@ -3,10 +3,17 @@ package com.asimplenerd.chromaglobs.Classes
 import android.content.Context
 import android.util.Log
 import com.asimplenerd.chromaglobs.MainActivity
-import com.google.firebase.database.*
+import com.badlogic.gdx.utils.XmlReader
+import com.badlogic.gdx.utils.XmlWriter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 var playerGold = -1L
@@ -18,8 +25,11 @@ lateinit var mainActivity : MainActivity
 var playerName = ""
 var missionDesc = ""
 
+lateinit var context : Context
+
 fun initialize(main : MainActivity){
     mainActivity = main
+    context = main.applicationContext
 }
 
 fun addCardToPlayer(player : Player, card : Card){
@@ -226,8 +236,29 @@ private fun makeNewMissions(player: Player) {
     var id3 = rand.nextInt(7)
     stuff.put("2", id3)
 
+    revertMission(player.nextMissionID)
+    revertMission(player.nextMissionID)
+    revertMission(player.nextMissionID)
+
     FirebaseDatabase.getInstance().getReference("Users").child(player.id).child("Missions").updateChildren(stuff)
     player.setPlayerMissions(id1, id2, id3)
+}
+
+private fun revertMission(id : Int) {
+    var myFile = File(context.filesDir, "/missions/${id.toString()}.xml")
+
+    if(myFile.exists()) {
+        var reader = XmlReader()
+        var missionFile = reader.parse(FileInputStream(myFile))
+        var desc = missionFile.get("Description")
+
+        var writer = XmlWriter(FileWriter(myFile))
+        writer.element("Mission").element("Description", desc).element("RewardType", "none").pop()
+        writer.close()
+    }
+    else {
+        Log.d("mission rewards", "no file!!!!!")
+    }
 }
 
 private fun repopulateMissions(player: Player, context : Context) {
