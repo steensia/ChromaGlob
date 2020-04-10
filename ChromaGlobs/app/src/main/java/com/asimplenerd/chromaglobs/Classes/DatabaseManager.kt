@@ -223,6 +223,9 @@ fun updatePlayersMissions(player: Player) {
     db.getReference("Users").child(player.id).child("Missions").addListenerForSingleValueEvent(dataListener)
 }
 
+fun checkMissionCompletionStatus(player: Player, goal : Daily){
+
+}
 
 private fun makeNewMissions(player: Player) {
     var stuff = HashMap<String, Any>()

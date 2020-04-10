@@ -1,5 +1,6 @@
 package com.asimplenerd.chromaglobs.Classes
 
+import android.content.Context
 import android.util.Log
 import android.widget.TextView
 import com.asimplenerd.chromaglobs.Dailies
@@ -18,6 +19,7 @@ class Daily() {
     private var missionId = -1
     private lateinit var descriptionField : TextView
     private lateinit var dailyFrag : Dailies
+    private  var missionGoal : Int = 0
     // TODO: add a date to missions, so we know when to give new ones.
     // OR just load a new mission once they've claimed the reward for the completed mission?
 
@@ -40,25 +42,28 @@ class Daily() {
         var f = File(d.context.applicationContext.filesDir, "missions/$missionId.xml")
         if(f.exists())
         {
-            var fileIn = XmlReader()
-            var theWholeFile = fileIn.parse(FileInputStream(f))
-            var desc = theWholeFile.get("Description")
+            val fileIn = XmlReader()
+            val theWholeFile = fileIn.parse(FileInputStream(f))
+            val desc = theWholeFile.get("Description")
             Log.d("mission desc", desc)
             this.description = desc
-            var rewardType = theWholeFile.get("RewardType", "none")
-            if(rewardType == "none") {
+            val rewardType = theWholeFile.get("RewardType", "none")
+            val completed = theWholeFile.get("Complete", "false")
+            val rewardClaimed = theWholeFile.get("Claimed", "no")
+            this.missionType = missionType
+            this.complete = completed == "true"
+            this.claimed = rewardClaimed == "true"
+            val goal = theWholeFile.get("Goal", "no goal")
+            if(rewardType != "none") {
                 Log.d("reward type", "this mission has no reward!")
-                f.createNewFile()
-                val writer = XmlWriter(FileWriter(f))
-                writer.element("Mission").element("Description", desc).element("RewardType", missionType).pop()
-                writer.close()
-            }
-            else {
                 this.missionType = MissionType.valueOf(rewardType)
+            }
+            if(goal != "no goal"){
+                this.missionGoal = goal.toInt()
             }
         }
         else{
-            Log.d("mission desc", "${d.context.applicationContext.filesDir}/missions/$missionId.xml")
+            Log.d("mission desc", "Failed to open file: ${d.context.applicationContext.filesDir}/missions/$missionId.xml")
         }
     }
 
@@ -76,6 +81,10 @@ class Daily() {
 
     fun getDescription() : String {
         return description
+    }
+
+    fun setClaimed(bool : Boolean){
+        claimed = bool
     }
 
     fun setDescription(d : String) {
@@ -97,6 +106,7 @@ class Daily() {
             MissionType.Gold -> addGoldToPlayer(player, calculateGoldReward())
         }
         claimed = true
+        updateXmlTag("Claimed", "yes")
     }
 
     fun setMissionType(type : MissionType){
@@ -121,7 +131,36 @@ class Daily() {
         return 10
     }
 
+    fun getMissionCompletionCondition() : Int{
+        return missionGoal
+    }
+
     fun setTextView(v : TextView) {
         descriptionField = v
+    }
+
+    private fun updateXmlTag(tag : String, value : String){
+        when(tag.toLowerCase()){
+            "description" -> description = value
+            "rewardtype" -> missionType = MissionType.valueOf(value)
+            "complete" -> complete = value.toLowerCase() == "true"
+            "claimed" -> claimed = value.toLowerCase() == "true"
+            "goal" -> missionGoal = value.toInt()
+        }
+        updateXmlFile();
+    }
+
+    fun updateXmlFile(){
+        val file = File(descriptionField.context?.filesDir, "/missions/$missionId.xml")
+        val writer = XmlWriter(FileWriter(file))
+        writer.element("Mission").element("Description", description).element("RewardType", missionType).element("Complete", complete).element("Claimed", claimed).element("Goal", missionGoal).pop()
+        writer.close()
+    }
+
+    fun updateXmlFile(context : Context){
+        val file = File(context.filesDir, "/missions/$missionId.xml")
+        val writer = XmlWriter(FileWriter(file))
+        writer.element("Mission").element("Description", description).element("RewardType", missionType).element("Complete", complete).element("Claimed", claimed).element("Goal", missionGoal).pop()
+        writer.close()
     }
 }

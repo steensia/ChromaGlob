@@ -1,6 +1,7 @@
 package com.asimplenerd.chromaglobs.Classes
 
 import android.util.Log
+import com.google.firebase.database.Exclude
 import java.io.File
 
 class Player(){
@@ -8,6 +9,8 @@ class Player(){
     lateinit var id : String
     var OwnedCards = ArrayList<Card>()
     var missions = ArrayList<Int>(3)
+
+    @Exclude
     var nextMissionID = 0
 
     constructor(Name : String, id : String, vararg OwnedCards : ArrayList<Card>) : this(){

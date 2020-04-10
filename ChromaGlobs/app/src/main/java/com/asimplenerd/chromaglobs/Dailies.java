@@ -114,10 +114,22 @@ public class Dailies extends Fragment implements View.OnClickListener {
         //Setup button based on completion status
         getView().findViewById(R.id.rewardButton).setEnabled(daily.getComplete());
         getView().findViewById(R.id.rewardButton).setOnClickListener(this);
+
+        //Have daily commit to file
+        daily.updateXmlFile();
     }
 
     public void updateDescription() {
         TextView desc = getView().findViewById(R.id.missionDesc);
         desc.setText(daily.getDescription());
+    }
+
+    private void checkDailyStatus(){
+        if(!daily.getComplete()){
+            DatabaseManagerKt.checkMissionCompletionStatus(((MainActivity) getActivity()).user, daily);
+
+        }
+        //Enable the button if a daily is not claimed and is complete.
+        getView().findViewById(R.id.rewardButton).setEnabled(daily.getComplete() && (!daily.getClaimed()));
     }
 }
