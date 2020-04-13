@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.asimplenerd.chromaglobs.Classes.Card;
 import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.Player;
+import com.asimplenerd.chromaglobs.ProfileActivityMap.ProfileFragment;
 import com.asimplenerd.chromaglobs.SettingsActivityMap.SettingsFragment;
 import com.asimplenerd.chromaglobs.ShopActivityMap.ShopFragment;
 import com.asimplenerd.chromaglobs.TradeActivityMap.TradeSetupFragment;
@@ -95,7 +96,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.missionsButton).setOnClickListener(this);
         view.findViewById(R.id.shopButton).setOnClickListener(this);
         view.findViewById(R.id.settingsButton).setOnClickListener(this);
-
+        view.findViewById(R.id.profileButton).setOnClickListener(this);
         return view;
     }
 
@@ -147,6 +148,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             case R.id.shopButton:
                 setupShop();
                 break;
+            case R.id.profileButton:
+                setupProfile();
             default:
                 Log.d("OnClick", "not handled for item: " + v.getId());
                 break;
@@ -175,6 +178,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         ownedCardBundle.putParcelableArrayList("ownedCards", mainActivity.getOwnedCards());
         tradeFrag.setArguments(ownedCardBundle);
         mainActivity.swapToNewFragment(tradeFrag, true);
+    }
+
+    private void setupProfile() {
+        ((MainActivity) getActivity()).swapToNewFragment(new ProfileFragment(), true);
     }
 
     private void setupSettings() {

@@ -36,4 +36,10 @@
     <string name="shop_prompt">Buy Cards and Packs!</string>
     <string name="currency_label">Blob$:</string>
     <string name="reward_claimed">Reward claimed!</string>
+    <string name="money_label">Money:</string>
+    <string name="level_label">Level:</string>
+    <string name="battles_button_label">Battles</string>
+    <string name="friends_button_label">Friends</string>
+    <string name="username_label">Username</string>
+    <string name="logout_button_label">Logout</string>
 </resources>
