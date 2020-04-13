@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/decksLabel"
+            android:id="@+id/decksButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
@@ -52,34 +52,34 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/battlesLabel"
+            android:id="@+id/battlesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
             android:text="@string/battles_button_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/decksLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/decksButton" />
 
         <Button
-            android:id="@+id/friendsLabel"
+            android:id="@+id/friendsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
-            android:text="@string/friends_button_label"
+            android:text="@string/friends_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/battlesLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/battlesButton" />
 
         <Button
-            android:id="@+id/collectionLabel"
+            android:id="@+id/collectionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
             android:text="@string/collection_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/friendsLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/friendsButton" />
 
         <TextView
             android:id="@+id/moneyLabel"
@@ -88,7 +88,7 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="160dp"
             android:text="@string/money_label"
-            app:layout_constraintStart_toEndOf="@+id/battlesLabel"
+            app:layout_constraintStart_toEndOf="@+id/battlesButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
@@ -110,7 +110,7 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="224dp"
             android:text="@string/level_label"
-            app:layout_constraintStart_toEndOf="@+id/friendsLabel"
+            app:layout_constraintStart_toEndOf="@+id/friendsButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText

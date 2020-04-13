@@ -4,10 +4,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.asimplenerd.chromaglobs.CollectionActivityMap.CollectionActivity;
+import com.asimplenerd.chromaglobs.MainActivity;
 import com.asimplenerd.chromaglobs.R;
 
 /**
@@ -15,7 +18,7 @@ import com.asimplenerd.chromaglobs.R;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -60,6 +63,48 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        view.findViewById(R.id.decksButton).setOnClickListener(this);
+        view.findViewById(R.id.battlesButton).setOnClickListener(this);
+        view.findViewById(R.id.friendsButton).setOnClickListener(this);
+        view.findViewById(R.id.collectionButton).setOnClickListener(this);
+        view.findViewById(R.id.logoutButton).setOnClickListener(this);
+        return view;
+    }
+
+    @Override
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.decksButton:
+                setupDecks();
+                break;
+            case R.id.battlesButton:
+                setupBattles();
+                break;
+            case R.id.friendsButton:
+                setupFriends();
+                break;
+            case R.id.collectionButton:
+                setupCollection();
+                break;
+            default:
+                Log.d("OnClick", "not handled for item: " + v.getId());
+                break;
+        }
+    }
+
+    private void setupCollection() {
+        ((MainActivity) getActivity()).startCollectionsActivity();
+    }
+    private void setupFriends() {
+        ((MainActivity) getActivity()).swapToNewFragment(new FriendsFragment(), true);
+    }
+
+    private void setupBattles() {
+        ((MainActivity) getActivity()).swapToNewFragment(new BattlesFragment(), true);
+    }
+
+    private void setupDecks() {
+        ((MainActivity) getActivity()).startDecksActivity();
     }
 }

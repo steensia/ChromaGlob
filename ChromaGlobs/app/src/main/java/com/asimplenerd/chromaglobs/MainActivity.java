@@ -19,6 +19,7 @@ import com.asimplenerd.chromaglobs.Classes.DatabaseManagerKt;
 import com.asimplenerd.chromaglobs.Classes.GlobType;
 import com.asimplenerd.chromaglobs.Classes.Rarity;
 import com.asimplenerd.chromaglobs.CollectionActivityMap.CollectionActivity;
+import com.asimplenerd.chromaglobs.CollectionActivityMap.DeckActivity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.google.firebase.database.ChildEventListener;
@@ -73,6 +74,11 @@ public class MainActivity extends FragmentActivity implements LoginFragment.OnFr
 
     public void startCollectionsActivity(){
         Intent intent = new Intent(this, CollectionActivity.class);
+        startActivity(intent);
+    }
+
+    public void startDecksActivity(){
+        Intent intent = new Intent(this, DeckActivity.class);
         startActivity(intent);
     }
 
